@@ -3,17 +3,20 @@ import ReactDOM from 'react-dom'
 import App from './components/App'
 import registerServiceWorker from './registerServiceWorker'
 import { injectGlobal } from 'styled-components'
+import css from 'css.js'
 import 'normalize.css'
 import './variables.css'
 import 'semantic-ui-css/semantic.min.css';
+import { lighten } from 'polished'
 
 // Global Styles
 injectGlobal`
   @import url('https://fonts.googleapis.com/css?family=Fredoka+One|Nunito');
 
   body {
-    background-color: var(--main-bg-color) !important;
-    font-family: var(--font-family) !important;
+    ${'' /* background-color: ${css.bgColor} !important; */}
+    font-family: ${css.fontFamily} !important;
+    background-color: ${lighten(0.1, '#d1d8e0')} !important
   }
 
   h1,

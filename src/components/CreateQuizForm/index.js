@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
-import { Button, Form, Input } from 'semantic-ui-react'
+import { Button, Form, Icon } from 'semantic-ui-react'
 import Box from '../Box'
 import Question from './Question'
-import QuizTag from './QuizTag'
+import Tags from './Tags'
+import FormField from './FormField'
+import Label from './Label'
+import Input from 'components/Input'
+import TextArea from 'components/TextArea'
 
 export default class CreateQuizForm extends Component {
   constructor() {
@@ -10,7 +14,7 @@ export default class CreateQuizForm extends Component {
     this.state = {
       questionID: 1,
       questions: [],
-      tags: ["java"],
+      tags: [],
       question: "",
       name: "",
       description: "",
@@ -20,13 +24,37 @@ export default class CreateQuizForm extends Component {
     this.addQuestion = this.addQuestion.bind(this)
     this.addAnswer = this.addAnswer.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
+    this.addTag = this.addTag.bind(this)
+    this.deleteTag = this.deleteTag.bind(this)
   }
 
   handleInputChange(event) {
     const name = event.target.name
     const value = event.target.value
+
     this.setState(prevState => {
       prevState[name] = value
+      return prevState
+    })
+  }
+
+  addTag(e) {
+    e.preventDefault()
+    if (this.state.tag && this.state.tags.length < 10) {
+      this.setState(({ tag, tags }) => {
+        if (!tags.find(tag => tag === this.state.tag)) {
+          tags.push(this.state.tag)
+          tag = ""
+          return {tags, tag}
+        }
+      })
+    }
+  }
+
+  deleteTag(e) {
+    const tagName = e.target.getAttribute('data-tag-name')
+    this.setState((prevState) => {
+      prevState.tags = prevState.tags.filter(tag => tag !== tagName)
       return prevState
     })
   }
@@ -53,39 +81,43 @@ export default class CreateQuizForm extends Component {
     })
   }
 
+
+
   render() {
     return (
-      <Form>
-        <Box>
-          <Form.Field>
-            <label>Quiz Name</label>
-            <input placeholder='First Name' />
-          </Form.Field>
-          <Form.Field>
-            <label>Quiz Description</label>
-            <input placeholder='Last Name' />
-          </Form.Field>
-        </Box>
 
-        <Box>
-          <Form.Field>
-            <label>Add Question</label>
-            <input name="question" onChange={this.handleInputChange} placeholder='First Name' />
-          </Form.Field>
-          <Form.Field>
-            {/* <Input placeholder='Search...' actionPosition="left" action={{icon: 'plus', color: 'teal'}} /> */}
-            {/* <Input
-              action={{
-                color: 'teal',
-                // labelPosition: 'left',
-                icon: 'plus',
-                // content:'Question'
-              }}
-              actionPosition='left'
-              placeholder='Add Question...'
-              defaultValue=''
-            /> */}
-          </Form.Field>
+      <Box>
+        <Form>
+          <FormField>
+            <Label>Name</Label>
+            <Input fluid placeholder='First Name' />
+          </FormField>
+          <FormField>
+            <Label>Description</Label>
+            <TextArea placeholder='Last Name' />
+          </FormField>
+        </Form>
+
+        <Form onSubmit={this.addTag}>
+          <FormField>
+            <Label>Tags</Label>
+            <Tags tags={this.state.tags} deleteTag={this.deleteTag}/>
+            <Input
+              fluid
+              placeholder='add tag...'
+              actionPosition="left"
+              action={{icon: 'tag', color: 'blue'}}
+              value={this.state.tag}
+              name="tag"
+              onChange={this.handleInputChange}
+            />
+          </FormField>
+        </Form>
+
+        <FormField>
+          <Label>Questions</Label>
+          <Button primary><Icon name="plus"/> Add Question</Button>
+
           {this.state.questions.map((q, i) => (
             <Question
               key={q.id}
@@ -95,24 +127,8 @@ export default class CreateQuizForm extends Component {
               addAnswer={this.addAnswer}
             />
           ))}
-        </Box>
-
-        <Box>
-          <Form.Field>
-            <label>Quiz Tag</label>
-            <input placeholder='First Name' />
-          </Form.Field>
-          <Form.Field>
-            <Button primary>Add Tag</Button>
-          </Form.Field>
-          {this.state.tags.map(tag => <QuizTag tag={tag} />)}
-        </Box>
-
-        {/* <Form.Field>
-          <Button primary fluid size='huge'>Create Quiz</Button>
-        </Form.Field> */}
-
-      </Form>
+        </FormField>
+      </Box>
     )
   }
 }

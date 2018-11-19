@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Input }from 'semantic-ui-react'
 import styled from 'styled-components'
 
@@ -14,6 +14,7 @@ const StyledInput = styled(Input)`
 
   &&&& input {
     position: absolute;
+    border: none;
     top: 0;
     bottom: 0;
     padding-left: calc(72.54px + 1em);

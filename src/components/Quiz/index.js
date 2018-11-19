@@ -1,34 +1,22 @@
 import React, { Component } from 'react'
 import Question from './Question'
+import Button from 'components/Button'
 
 export default class Quiz extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      quizInProgress: false,
       questionIndex: 0,
       answerdQuestions: [],
-      questions: [
-        {
-          question: "What is foo?",
-          answers: [
-            { answer: "foo", isCorrect: true},
-            { answer: "bar", isCorrect: false},
-            { answer: "baz", isCorrect: false}
-          ]
-        },
-        {
-          question: "What is bar?",
-          answers: [
-            { answer: "foo", isCorrect: true},
-            { answer: "bar", isCorrect: false},
-            { answer: "baz", isCorrect: false}
-          ]
-        }
-      ],
+      questions: props.questions,
     }
 
     this.answerQuestion = this.answerQuestion.bind(this)
+  }
+
+  nextQuestion() {
   }
 
   answerQuestion(correct) {
@@ -43,17 +31,10 @@ export default class Quiz extends Component {
   render() {
     const questions = this.state.questions
     const questionIndex = this.state.questionIndex
-
     return (
       <div>
-        {questionIndex < questions.length? (
-          <Question
-            question={questions[questionIndex]}
-            answerQuestion={this.answerQuestion}
-          />
-        ) : (
-          <h2>Quiz Over</h2>
-        )}
+        <Question question={questions[this.state.questionIndex]}/>
+        <Button onClick={() => {}}>Next Question</Button>
       </div>
     )
   }

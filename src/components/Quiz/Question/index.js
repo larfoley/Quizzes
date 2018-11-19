@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Answers from './Answers'
 
 export default class Question extends Component  {
   constructor(props) {
@@ -15,21 +16,15 @@ export default class Question extends Component  {
     this.setState({answerState: 1, answered: true})
   }
 
-  render = () => (
-    <div>
-      <h2>Question</h2>
-      <h2>{this.props.question.question}</h2>
-      <ul>
-        {this.props.question.answers.map((ans, i) => (
-          <button
-            key={i}
-            value={ans.isCorrect}
-            answered={this.state.answered}
-            onClick={this.onAnswerQuestion}>
-            {ans.answer}
-          </button>
-        ))}
-      </ul>
+  render() {
+    const question = this.props.question
+    console.log(question.answers);
+    return (
+      <div>
+        <h2>{question.question}</h2>
+        <Answers answers={question.answers}/>
     </div>
-  )
+    )
+  }
+
 }

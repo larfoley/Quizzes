@@ -1,31 +1,9 @@
 import React, { Component } from 'react'
-import { Form, Input }from 'semantic-ui-react'
+import { Form }from 'semantic-ui-react'
 import QuizList from 'components/QuizList'
 import SearchBar from './SearchBar'
+import quizzes from 'mock-quizzes.js'
 
-const quizzes = [
-  {
-    id: 1,
-    name: "Java",
-    author: "John Doe",
-    description: "",
-    tags: ["Java", "Programing", "Computer Science"]
-  },
-  {
-    id: 2,
-    name: "Java",
-    author: "John Doe",
-    description: "",
-    tags: ["Java", "Programing", "Computer Science"]
-  },
-  {
-    id: 3,
-    name: "Java",
-    author: "John Doe",
-    description: "",
-    tags: ["Java", "Programing", "Computer Science"]
-  }
-]
 
 export default class SearchQuiz extends Component {
   constructor(props) {
@@ -51,8 +29,6 @@ export default class SearchQuiz extends Component {
   }
 
   render() {
-    const quizzes = this.state.searchResults.map(quiz => <h1>Quiz</h1>)
-
     return (
       <React.Fragment>
         <Form onSubmit={this.onSearch.bind(this) }>
