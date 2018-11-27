@@ -53,9 +53,28 @@ const Navigation = props => (
           <Button primary><Icon name="plus"/> Create Quiz</Button>
         </Link>
 
-        <Link to="/account" activeStyle={activeStyle}>
-          <Icon name="user" circular inverted color="blue" />
+        <Link to="/search" activeStyle={activeStyle}>
+          <Icon name="search" size="large"/>
         </Link>
+
+        <Link to="/tags" activeStyle={activeStyle}>
+          <Icon name="tag" size="large"/>
+        </Link>
+
+        {true? (
+          <React.Fragment>
+            <Link to="/login" activeStyle={activeStyle}>
+              Login
+            </Link>
+            <Link to="/register" activeStyle={activeStyle}>
+              Register
+            </Link>
+          </React.Fragment>
+        ) : (
+          <Link to="/create-quiz" activeStyle={activeStyle}>
+            <Icon name="user" size="large"/>
+          </Link>
+        )}
       </Grid.Column>
     </Grid>
   </PageContainer>

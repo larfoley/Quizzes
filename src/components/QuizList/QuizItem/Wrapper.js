@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import Box from 'components/Box'
 
 const StyledBox = styled(Box)`
+  max-width: 600px;
+  margin: auto;
   margin-bottom: 2em;
   padding: 0;
 
@@ -25,6 +27,9 @@ const StyledLink = styled.a`
   color: black;
   padding: 2em;
   display: block;
+  &:hover {
+    color: initial;
+  }
 `
 
 const Wrapper = ( { children, quizID }) => (

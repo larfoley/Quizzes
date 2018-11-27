@@ -1,25 +1,47 @@
 import React from 'react'
+import axios from 'axios'
 import QuizItem from './QuizItem'
 import PropTypes from 'prop-types'
 import { Loader } from 'semantic-ui-react'
 
-const QuizList = props => (
-  <div>
-    <Loader active={props.loading} inline="centered">Loading</Loader>
-    <div>
-      {props.quizzes.map((quiz, i) => (
-        <QuizItem
-          key={quiz.id}
-          quizID={quiz.id}
-          name={quiz.name}
-          description={quiz.description}
-          author={quiz.author}
-          tags={quiz.tags}
-        />
-      ))}
-    </div>
-  </div>
-)
+class QuizList extends React.Component {
+  constructor() {
+    super()
+
+    this.state = {
+      quizzes: [],
+      loading: false
+    }
+  }
+
+  componentWillMount() {
+    this.setState({loading: true})
+    axios.get('/api/quizzes')
+      .then(({data}) => {
+        this.setState({quizzes: data, loading: false})
+      })
+      .catch(err => console.log)
+  }
+  render() {
+    return (
+      <div>
+        <Loader active={this.state.loading} inline="centered">Loading</Loader>
+        <div>
+          {this.state.quizzes.map((quiz, i) => (
+            <QuizItem
+              key={quiz.id}
+              quizID={quiz._id}
+              name={quiz.name}
+              description={quiz.description}
+              author={quiz.author}
+              tags={quiz.tags}
+            />
+          ))}
+        </div>
+      </div>
+    )
+  }
+}
 
 QuizList.propTypes = {
   quizzes: PropTypes.array

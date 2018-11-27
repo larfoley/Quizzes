@@ -5,6 +5,8 @@ import SearchPage from './SearchPage'
 import QuizPage from './QuizPage'
 import LoginPage from './LoginPage'
 import RegisterPage from './RegisterPage'
+import QuizPreviewPage from './QuizPreviewPage'
+import TagsPage from './TagsPage'
 
 export {
   HomePage,
@@ -13,5 +15,7 @@ export {
   SearchPage,
   QuizPage,
   LoginPage,
-  RegisterPage
+  RegisterPage,
+  QuizPreviewPage,
+  TagsPage
 }

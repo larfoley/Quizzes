@@ -1,17 +1,16 @@
 import React from 'react'
-import { Main } from '../layouts'
 import PageContainer from 'components/PageContainer'
 import QuizList from 'components/QuizList'
-import SearchQuiz from 'components/SearchQuiz'
+import Navigation from 'components/Navigation'
 import quizzes from 'mock-quizzes'
 
 const Home = props => (
-  <Main>
+  <div>
+    <Navigation userIsAuthenticated={props.user}/>
     <PageContainer>
-      <SearchQuiz />
       <QuizList quizzes={quizzes} />
     </PageContainer>
-  </Main>
+  </div>
 )
 
 export default Home
