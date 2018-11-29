@@ -21,10 +21,12 @@ export default class LoginForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    alert()
-    this.auth.authenticateUser("", "", (err, res) => {
+    const email = this.state.email
+    const password = this.state.password
+
+    this.auth.authenticateUser(email, password, (err, res) => {
       if (err) { return alert(err) }
-      alert()
+      alert("Logged In")
       console.log(res);
     })
   }

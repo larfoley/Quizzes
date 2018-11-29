@@ -3,6 +3,9 @@ import { NavLink } from "react-router-dom"
 import styled from 'styled-components'
 import { Icon, Grid, Button } from 'semantic-ui-react'
 import PageContainer from 'components/PageContainer'
+import Auth from 'components/Auth'
+
+const auth = new Auth()
 
 const StyledNav = styled.nav`
   background-color: white;
@@ -61,7 +64,7 @@ const Navigation = props => (
           <Icon name="tag" size="large"/>
         </Link>
 
-        {true? (
+        {!auth.isAuthenticated()? (
           <React.Fragment>
             <Link to="/login" activeStyle={activeStyle}>
               Login
@@ -71,9 +74,14 @@ const Navigation = props => (
             </Link>
           </React.Fragment>
         ) : (
-          <Link to="/create-quiz" activeStyle={activeStyle}>
-            <Icon name="user" size="large"/>
-          </Link>
+          <React.Fragment>
+            <Link to="/create-quiz" activeStyle={activeStyle}>
+              <Icon name="user" size="large"/>
+            </Link>
+            <Link to="/create-quiz" activeStyle={activeStyle}>
+              <Icon name="sign-out" size="large"/>
+            </Link>
+          </React.Fragment>
         )}
       </Grid.Column>
     </Grid>

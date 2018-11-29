@@ -10,7 +10,8 @@ class QuizList extends React.Component {
 
     this.state = {
       quizzes: [],
-      loading: false
+      loading: false,
+      errorLoadingQuizzes: false
     }
   }
 
@@ -20,13 +21,19 @@ class QuizList extends React.Component {
       .then(({data}) => {
         this.setState({quizzes: data, loading: false})
       })
-      .catch(err => console.log)
+      .catch(err => {
+        console.log(err);
+        this.setState({loading: false, errorLoadingQuizzes: true})
+      })
   }
   render() {
     return (
       <div>
         <Loader active={this.state.loading} inline="centered">Loading</Loader>
         <div>
+          {this.state.errorLoadingQuizzes? (
+            <p>Unable to load quizzes. Try again later.</p>
+          ) : null}
           {this.state.quizzes.map((quiz, i) => (
             <QuizItem
               key={quiz.id}

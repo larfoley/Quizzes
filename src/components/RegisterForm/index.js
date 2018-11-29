@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import Box from 'components/Box'
 import { Form, Input, Label, FormField } from 'components/Form'
 import Button from 'components/Button'
-import axios from 'axios'
 import { Link } from 'react-router-dom'
+import Auth from 'components/Auth'
+
+const auth = new Auth()
 
 export default class RegisterForm extends Component {
   constructor(props) {
@@ -11,10 +13,12 @@ export default class RegisterForm extends Component {
     this.state = {
       email: "",
       password: "",
+      confirmPassword: "",
       submitting: false,
       error: null,
       succesfullyRegistered: false
     }
+
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
   }
@@ -23,13 +27,13 @@ export default class RegisterForm extends Component {
     e.preventDefault()
     this.setState({submitting: true})
     const { email, password } = this.state
-    axios.post('/api/users/register', { email, password })
-      .then(res => {
-        this.setState({succesfullyRegistered: true})
-      })
-      .catch(err => {
+    auth.registerUser(email, password, (err) => {
+      if (err) {
         this.setState({error: err})
-      })
+      } else {
+        this.setState({succesfullyRegistered: true})
+      }
+    })
   }
 
   handleChange({ target }) {

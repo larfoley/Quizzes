@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 import Box from 'components/Box'
 
 const StyledBox = styled(Box)`
@@ -23,7 +24,7 @@ const StyledBox = styled(Box)`
   }
 `
 
-const StyledLink = styled.a`
+const StyledLink = styled(Link)`
   color: black;
   padding: 2em;
   display: block;
@@ -34,7 +35,7 @@ const StyledLink = styled.a`
 
 const Wrapper = ( { children, quizID }) => (
   <StyledBox>
-    <StyledLink href={"/quiz/" + quizID}>
+    <StyledLink to={"/quiz/" + quizID}>
       {children}
     </StyledLink>
   </StyledBox>
