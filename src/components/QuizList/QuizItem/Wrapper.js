@@ -5,7 +5,8 @@ import Box from 'components/Box'
 
 const StyledBox = styled(Box)`
   max-width: 600px;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 2em;
   padding: 0;
 

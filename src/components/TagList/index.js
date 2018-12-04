@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+// import { Link } from 'react-router-dom'
 
-const Link = styled.a`
+const StyledLink = styled.span`
   color: #1DA1F2;
   margin-right: 1em;
   display: ${props => props.inline === "true" ? "inline" : "block"};
@@ -14,24 +15,24 @@ const Wrapper = styled.div`
 `
 
 const Tag = props => (
-  <Link
+  <StyledLink
     inline={props.inline}
-    href={`/quiz/search/${props.name}`}>
-    #{props.name}
-  </Link>
+    to={`/tags/${props.name}`}>
+    #{props.displayName}
+  </StyledLink>
 )
 
 const TagList = props => (
   <Wrapper>
     {props.tags.map((tag, key) => (
-      <Tag inline={props.inline} key={key} name={tag}/>
+      <Tag inline={props.inline} key={key} displayName={tag}/>
     ))}
   </Wrapper>
 )
 
 TagList.propTypes = {
   tags: PropTypes.array,
-  inline: PropTypes.bool
+  inline: PropTypes.string
 }
 
 export default TagList

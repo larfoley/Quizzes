@@ -7,11 +7,19 @@ import css from 'css.js'
 import 'normalize.css'
 import './variables.css'
 import 'semantic-ui-css/semantic.min.css';
+import 'react-notifications/lib/notifications.css';
 import { lighten } from 'polished'
 
 // Global Styles
 injectGlobal`
   @import url('https://fonts.googleapis.com/css?family=Fredoka+One|Nunito');
+
+  html {
+    box-sizing: border-box;
+  }
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
 
   body {
     ${'' /* background-color: ${css.bgColor} !important; */}

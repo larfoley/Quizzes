@@ -1,20 +1,21 @@
 import React, { Component } from 'react'
 import Button from 'components/Button'
+import Question from './Question'
 import Answer from './Answer'
+import QuizResults from './QuizResults'
 
 export default class Quiz extends Component {
   constructor(props) {
     super(props)
-
     this.state = {
       quizInProgress: false,
       questionIndex: 0,
       answeredQuestions: [],
       questions: props.questions,
-      questionAnswered: false
+      questionAnswered: false,
+      quizIsFinished: false,
     }
-
-    this.answerQuestion = this.answerQuestion.bind(this)
+    this.playAgain = this.playAgain.bind(this)
   }
 
   getCurrentQuestion() {
@@ -34,13 +35,16 @@ export default class Quiz extends Component {
       })
 
     } else {
-      alert('over')
+      this.setState(prevState => {
+        prevState.questionAnswered = false
+        prevState.questions[prevState.questionIndex].answers.forEach(ans => {
+          delete ans['answeredCorrectly']
+        })
+        prevState.quizIsFinished = true
+        return prevState
+      })
     }
 
-  }
-
-  answerQuestion(answer) {
-    console.log(this.getCurrentQuestion());
   }
 
   onAnswerQuestion({ target }) {
@@ -63,6 +67,16 @@ export default class Quiz extends Component {
     }
   }
 
+  playAgain() {
+    this.setState({
+      quizInProgress: true,
+      questionIndex: 0,
+      answeredQuestions: [],
+      questionAnswered: false,
+      quizIsFinished: false,
+    })
+  }
+
   render() {
     const questions = this.state.questions
     const questionIndex = this.state.questionIndex
@@ -70,23 +84,36 @@ export default class Quiz extends Component {
     const currentAnswers = questions[questionIndex].answers
     return (
       <div>
-        <h2>{currentQuestion}</h2>
-        {currentAnswers.map((ans, i) => (
-          <Answer
-            key={i}
-            data-id={i}
-            onClick={this.onAnswerQuestion.bind(this)}
-            answered={this.state.questionAnswered}
-            answeredCorrectly={ans.answeredCorrectly}
-            isCorrect={ans.isCorrect}
-          >
-            {ans.answer}
-          </Answer>
-        ))}
-        {this.state.questionAnswered? (
-          <Button onClick={this.nextQuestion.bind(this)}>Next Question</Button>
-        ) : null}
-
+        {!this.state.quizIsFinished?
+          <React.Fragment>
+            <span>Question {questionIndex + 1 } of {questions.length}</span>
+            <Question>{currentQuestion}</Question>
+            {currentAnswers.map((ans, i) => (
+              <Answer
+                key={i}
+                data-id={i}
+                onClick={this.onAnswerQuestion.bind(this)}
+                answered={this.state.questionAnswered}
+                answeredCorrectly={ans.answeredCorrectly}
+                isCorrect={ans.isCorrect}
+                >
+                  {ans.answer}
+                </Answer>
+              ))}
+              {this.state.questionAnswered? (
+                questionIndex < questions.length - 1 ?
+                <Button onClick={this.nextQuestion.bind(this)}>Next Question</Button>
+                :
+                <Button onClick={this.nextQuestion.bind(this)}>Finish Quiz</Button>
+              ) : null }
+            </React.Fragment>
+          : (
+            <QuizResults
+              results={this.state.answeredQuestions}
+              playAgain={this.playAgain}
+            />
+          )
+        }
       </div>
     )
   }

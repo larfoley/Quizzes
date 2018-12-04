@@ -9,7 +9,7 @@ const QuizPreview = props => {
   return (
     <div>
       <h1>{name}</h1>
-      <TagList tags={tags}/>
+      <TagList tags={tags} inline="true"/>
       <p>{description}</p>
       <Link to={`/quiz/${_id}/start`}>
         <Button>Start</Button>

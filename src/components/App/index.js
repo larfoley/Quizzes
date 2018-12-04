@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Route } from "react-router-dom"
 import PrivateRoute from 'components/PrivateRoute'
+import { NotificationContainer } from 'react-notifications';
 import {
   LandingPage,
   HomePage,
@@ -10,7 +11,10 @@ import {
   LoginPage,
   RegisterPage,
   QuizPreviewPage,
-  TagsPage
+  TagsPage,
+  ProfilePage,
+  DashboardPage,
+  SettingsPage
 } from 'pages'
 
 
@@ -48,10 +52,12 @@ class App extends React.Component {
         <Route exact path="/quiz/:id" component={QuizPreviewPage} />
         <Route exact path="/quiz/:id/start" component={QuizPage} />
         <Route exact path="/tags" component={TagsPage} />
-        <Route exact path="/tags:tag" component={TagsPage} />
-        <PrivateRoute exact path="/dashboard" component={QuizPage} />
-        <Route exact path="/profile" component={QuizPage} />
+        <Route exact path="/tags/:tag" component={TagsPage} />
         <PrivateRoute exact path="/account" component={QuizPage} />
+        <PrivateRoute exact path="/dashboard" component={DashboardPage} />
+        <PrivateRoute exact path="/profile" component={ProfilePage} />
+        <PrivateRoute exact path="/settings" component={SettingsPage} />
+        <NotificationContainer />
       </div>
     </BrowserRouter>
   )

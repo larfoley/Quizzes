@@ -7,7 +7,6 @@ import { Loader } from 'semantic-ui-react'
 class QuizList extends React.Component {
   constructor() {
     super()
-
     this.state = {
       quizzes: [],
       loading: false,
@@ -36,7 +35,7 @@ class QuizList extends React.Component {
           ) : null}
           {this.state.quizzes.map((quiz, i) => (
             <QuizItem
-              key={quiz.id}
+              key={quiz._id}
               quizID={quiz._id}
               name={quiz.name}
               description={quiz.description}

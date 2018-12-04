@@ -11,6 +11,7 @@ export default class RegisterForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      userName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -26,8 +27,9 @@ export default class RegisterForm extends Component {
   handleSubmit(e) {
     e.preventDefault()
     this.setState({submitting: true})
-    const { email, password } = this.state
-    auth.registerUser(email, password, (err) => {
+    const { userName, email, password, confirmPassword } = this.state
+  
+    auth.registerUser({ userName, email, password, confirmPassword }, (err) => {
       if (err) {
         this.setState({error: err})
       } else {
@@ -47,7 +49,7 @@ export default class RegisterForm extends Component {
 
   render() {
     return (
-      <Box style={{maxWidth: "600px", margin: "auto"}}>
+      <Box style={{maxWidth: "600px", margin: "2em auto"}}>
         {this.state.succesfullyRegistered? (
           <div style={{textAlign: "center"}}>
             <h2>Thanks For Registering</h2>
@@ -68,6 +70,16 @@ export default class RegisterForm extends Component {
               />
             </FormField>
             <FormField>
+              <Label>User Name</Label>
+              <Input
+                name="userName"
+                disabled={this.submitting}
+                onChange={this.handleChange}
+                value={this.state.userName}
+                fluid
+              />
+            </FormField>
+            <FormField>
               <Label>Password</Label>
               <Input
                 type="password"
@@ -78,7 +90,19 @@ export default class RegisterForm extends Component {
                 fluid
               />
             </FormField>
-            <Button disabled={this.submitting}>Submit</Button>
+            <FormField>
+              <Label>Confirm Password</Label>
+              <Input
+
+                type="password"
+                name="confirmPassword"
+                onChange={this.handleChange}
+                value={this.state.confirmPassword}
+                disabled={this.submitting}
+                fluid
+              />
+            </FormField>
+            <Button fluid size="huge" disabled={this.submitting}>Register</Button>
           </Form>
         )}
 

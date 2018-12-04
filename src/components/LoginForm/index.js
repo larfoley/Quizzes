@@ -43,7 +43,7 @@ export default class LoginForm extends Component {
 
   render() {
     return (
-      <Box style={{maxWidth: "600px", margin: "auto"}}>
+      <Box style={{maxWidth: "600px", margin: "2em auto"}}>
         <Form onSubmit={this.handleSubmit}>
           {this.state.error? <p>{this.state.error.message}</p> : null}
           <h2>Login</h2>

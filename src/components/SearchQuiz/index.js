@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Form }from 'semantic-ui-react'
-import QuizList from 'components/QuizList'
+// import QuizList from 'components/QuizList'
 import SearchBar from './SearchBar'
 import quizzes from 'mock-quizzes.js'
 
@@ -13,6 +13,8 @@ export default class SearchQuiz extends Component {
       searchResults: [],
       loading: false
     }
+
+    console.log(this.state);
 
   }
 
@@ -37,10 +39,10 @@ export default class SearchQuiz extends Component {
             onChange={this.handleChange.bind(this)}
           />
         </Form>
-        <QuizList
+        {/* <QuizList
           quizzes={this.state.searchResults}
           loading={this.state.loading}
-        />
+        /> */}
       </React.Fragment>
     )
   }

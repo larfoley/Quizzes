@@ -12,7 +12,7 @@ const Answer = styled.li`
     } else if (props.answeredCorrectly === false) {
       return "#d63031"
     } else {
-      return css.bgColor
+      return "white"
     }
   }};
   color: ${props => {

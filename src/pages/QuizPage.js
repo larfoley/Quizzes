@@ -26,9 +26,9 @@ class QuizPage extends React.Component {
     return (
       <Main>
         <PageContainer>
-          <Box>
-            {quiz? <Quiz {...quiz}/> : null}
-          </Box>
+
+          {quiz? <Quiz {...quiz}/> : null}
+
         </PageContainer>
       </Main>
 

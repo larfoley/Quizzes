@@ -7,6 +7,9 @@ import LoginPage from './LoginPage'
 import RegisterPage from './RegisterPage'
 import QuizPreviewPage from './QuizPreviewPage'
 import TagsPage from './TagsPage'
+import DashboardPage from './DashboardPage'
+import ProfilePage from './ProfilePage'
+import SettingsPage from './SettingsPage'
 
 export {
   HomePage,
@@ -17,5 +20,8 @@ export {
   LoginPage,
   RegisterPage,
   QuizPreviewPage,
-  TagsPage
+  TagsPage,
+  SettingsPage,
+  DashboardPage,
+  ProfilePage
 }

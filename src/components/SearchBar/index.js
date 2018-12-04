@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 const StyledInput = styled(Input)`
   width: 100%;
+  margin-top: 2em;
   margin-bottom: 2em;
 
   &&&& .button {

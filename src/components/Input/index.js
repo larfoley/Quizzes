@@ -8,6 +8,12 @@ const StyledInput = styled(Input)`
     padding: 1.1em !important;
     background-color: ${css.bgColor} !important;
   }
+
+  &&& button {
+    padding: 1.5em;
+  }
 `
+
+
 
 export default StyledInput

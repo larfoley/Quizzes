@@ -7,6 +7,7 @@ const Wrapper = styled.span`
   display: inline-block;
   margin-right: 1em;
   margin-bottom: 1em;
+  margin-top: 1em;
 `
 const Tag = ({ name, deleteTag }) => (
   <Wrapper>
@@ -14,7 +15,7 @@ const Tag = ({ name, deleteTag }) => (
       <Label as='a' basic pointing='right'>
         {name}
       </Label>
-      <Button icon onClick={deleteTag} data-tag-name={name}>
+      <Button icon onClick={deleteTag} type="button" data-tag-name={name}>
         <Icon name='times' data-tag-name={name} />
       </Button>
     </Button>

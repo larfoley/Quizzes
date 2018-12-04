@@ -3,19 +3,24 @@ import axios from 'axios'
 class Auth {
 
   authenticateUser(username, password, callback) {
-    if (!this.isAuthenticated()) {
+    // if (!this.isAuthenticated()) {
       axios.get('/token')
-        .then(token => {
-          console.log(token);
-          sessionStorage.setItem('token', '123')
+        .then(({ data }) => {
+          console.log(data);
+          localStorage.setItem('token', JSON.stringify(data))
           callback(null)
         })
         .catch(err => callback)
-    }
+    // }
   }
 
-  registerUser(email, password, cb) {
-    axios.post('/api/users/register', { email, password })
+  registerUser({ userName, email, password, confirmPassword }, cb) {
+    axios.post('/api/account/register', {
+      userName,
+      email,
+      password,
+      confirmPassword
+    })
       .then(res => {
         cb(null)
       })
@@ -25,15 +30,16 @@ class Auth {
   }
 
   getAccessToken() {
-    return window.sessionStorage.getItem('token')
+    return JSON.parse(window.localStorage.getItem('token'))
   }
 
   isAuthenticated() {
-    return !!window.sessionStorage.getItem('token')
+    return true
+    // return !!window.localStorage.getItem('token')
   }
 
   logout() {
-    sessionStorage.removeItem('token')
+    localStorage.removeItem('token')
   }
 
 }
