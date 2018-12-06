@@ -4,7 +4,11 @@ class Auth {
 
   authenticateUser(username, password, callback) {
     // if (!this.isAuthenticated()) {
-      axios.post('/token')
+      axios.post('/token', {
+        grant_type: "password",
+        username,
+        password,
+      })
         .then(({ data }) => {
           console.log(data);
           localStorage.setItem('token', JSON.stringify(data))

@@ -12,6 +12,7 @@ import {
   RegisterPage,
   QuizPreviewPage,
   TagsPage,
+  TagPage,
   ProfilePage,
   DashboardPage,
   SettingsPage
@@ -52,7 +53,7 @@ class App extends React.Component {
         <Route exact path="/quiz/:id" component={QuizPreviewPage} />
         <Route exact path="/quiz/:id/start" component={QuizPage} />
         <Route exact path="/tags" component={TagsPage} />
-        <Route exact path="/tags/:tag" component={TagsPage} />
+        <Route exact path="/tags/:tagName" component={TagPage} />
         <PrivateRoute exact path="/account" component={QuizPage} />
         <PrivateRoute exact path="/dashboard" component={DashboardPage} />
         <PrivateRoute exact path="/profile" component={ProfilePage} />

@@ -58,17 +58,18 @@ export default class CreateQuizForm extends Component {
       ]
     }
 
-    axios({
-      method: 'post',
-      url: '/api/Quizzes',
-      data: quiz
-    })
-    .then(res => {
-      console.log(res.data)
-    })
-    .catch(err => {
-      console.log(err)
-    })
+    // axios({
+    //   method: 'post',
+    //   url: '/api/Quizzes',
+    //   data: quiz
+    // })
+    // .then(res => {
+    //   console.log(res.data)
+    // })
+    // .catch(err => {
+    //   console.log(err)
+    // })
+    console.log(this.state.questions);
   }
 
   updateQuiz(callback) {
@@ -144,18 +145,18 @@ export default class CreateQuizForm extends Component {
 
         <Form onSubmit={this.handleSubmit}>
           <FormField>
-            <Label>Name</Label>
-            <Input fluid placeholder='First Name' />
+            <Label>Name *</Label>
+            <Input fluid placeholder='Quiz Name' />
           </FormField>
           <FormField>
-            <Label>Description</Label>
-            <TextArea placeholder='Last Name' />
+            <Label>Description <small>(Optional)</small></Label>
+            <TextArea placeholder='Quiz Description' />
           </FormField>
         </Form>
 
         <Form onSubmit={this.addTag}>
           <FormField>
-            <Label>Tags</Label>
+            <Label>Tags <small>(Optional)</small></Label>
             <Input
               fluid
               placeholder='add tag...'
@@ -190,7 +191,7 @@ export default class CreateQuizForm extends Component {
           </Modal>
 
         </FormField>
-        {questions.map((q, key)=> <p key={key}>{q.question}</p>)}
+        {questions.map((q, key)=> <h3 key={key}>{q.question}</h3>)}
 
         <Button fluid size="huge" onClick={this.postQuiz.bind(this)} primary>
           <Icon name="plus" onClick={this.postQuiz.bind(this)}/> Save Quiz

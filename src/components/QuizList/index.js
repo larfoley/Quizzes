@@ -17,8 +17,9 @@ class QuizList extends React.Component {
   componentWillMount() {
     this.setState({loading: true})
     axios.get('/api/quizzes')
-      .then(({data}) => {
-        this.setState({quizzes: data, loading: false})
+      .then((res) => {
+        const quizzes = res.data || []
+        this.setState({quizzes: quizzes, loading: false})
       })
       .catch(err => {
         console.log(err);
@@ -35,12 +36,13 @@ class QuizList extends React.Component {
           ) : null}
           {this.state.quizzes.map((quiz, i) => (
             <QuizItem
-              key={quiz._id}
+              key={i}
               quizID={quiz._id}
               name={quiz.name}
               description={quiz.description}
               author={quiz.author}
               tags={quiz.tags}
+              questions={quiz.questions}
             />
           ))}
         </div>

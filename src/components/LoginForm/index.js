@@ -10,7 +10,7 @@ export default class LoginForm extends Component {
     super(props)
     this.auth = new Auth()
     this.state = {
-      email: "",
+      username: "",
       password: "",
       submitting: false,
       error: null,
@@ -21,10 +21,10 @@ export default class LoginForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    const email = this.state.email
+    const username = this.state.username
     const password = this.state.password
 
-    this.auth.authenticateUser(email, password, (err, res) => {
+    this.auth.authenticateUser(username, password, (err, res) => {
       if (err) { return alert(err) }
       alert("Logged In")
       console.log(res);
@@ -48,12 +48,12 @@ export default class LoginForm extends Component {
           {this.state.error? <p>{this.state.error.message}</p> : null}
           <h2>Login</h2>
           <FormField>
-            <Label>Email</Label>
+            <Label>Username</Label>
             <Input
-              name="email"
+              name="username"
               disabled={this.submitting}
               onChange={this.handleChange}
-              value={this.state.email}
+              value={this.state.username}
               fluid
             />
           </FormField>

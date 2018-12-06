@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Button, Form } from 'semantic-ui-react'
+import { Button, Form, Icon } from 'semantic-ui-react'
+import { NotificationManager } from 'react-notifications'
 import FormField from './FormField'
 import Label from './Label'
 import Input from 'components/Input'
@@ -19,37 +20,51 @@ export default class AddQuestionForm extends Component {
     this.state = {
       question: "",
       correctAnswer: "",
-      wrongAnswer1: "",
-      wrongAnswer2: "",
-      wrongAnswer3: ""
+      wrongAnswer: "",
+      wrongAnswers: [],
     }
+    this.onAddQuestion = this.onAddQuestion.bind(this)
+    this.onAddWrongAnswer = this.onAddWrongAnswer.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.handleWrongAnswerChange = this.handleWrongAnswerChange.bind(this)
+    this.removeWrongAnswer = this.removeWrongAnswer.bind(this)
   }
 
-  handleSubmit() {
+  onAddQuestion() {
     const {
       question,
       correctAnswer,
-      wrongAnswer1,
-      wrongAnswer2,
-      wrongAnswer3
+      wrongAnswers
     } = this.state
 
     const newQuestion = {
       question,
-      answers: [
-        {answer: correctAnswer, isCorrect: true},
-        {answer: wrongAnswer1, isCorrect: false},
-        {answer: wrongAnswer2, isCorrect: false},
-        {answer: wrongAnswer3, isCorrect: false}
-      ]
+      answers: [{answer: correctAnswer, isCorrect: true}]
     }
+
+    newQuestion.answers.concat(wrongAnswers)
 
     this.props.updateQuiz(prevState => {
       prevState.questions.push(newQuestion)
       prevState.modalIsOpen = false;
       return prevState
     })
+
+  }
+
+  onAddWrongAnswer(event) {
+    event.preventDefault()
+    if (this.state.wrongAnswers.length >= 5) {
+      NotificationManager.info("You are only allowed to add up to 5 wrong answers!")
+    } else if (this.state.wrongAnswer.trim() == "") {
+      NotificationManager.info("You did not enter a wrong answer!")
+    } else {
+      this.setState(prevState => {
+        prevState.wrongAnswers.push(prevState.wrongAnswer)
+        prevState.wrongAnswer = ""
+        return prevState
+      })
+    }
 
   }
 
@@ -63,10 +78,29 @@ export default class AddQuestionForm extends Component {
     })
   }
 
+  handleWrongAnswerChange({ target }) {
+    this.setState(prevState => {
+      const id = target.getAttribute('id')
+      prevState.wrongAnswers[id] = target.value
+      return prevState
+    })
+  }
+
+  removeWrongAnswer(e) {
+    const id = parseInt(e.target.getAttribute('deletewronganswerid'))
+
+    this.setState(prevState => {
+      prevState.wrongAnswers = prevState.wrongAnswers.filter((ans, i) => i !== id)
+      console.log(prevState.wrongAnswers.filter((ans, i) => i !== id));
+      return prevState
+    })
+
+  }
+
   render() {
     return (
       <Wrapper>
-        <Form onSubmit={this.handleSubmit.bind(this)}>
+        <Form onSubmit={this.onAddQuestion.bind(this)}>
           <FormField>
             <Label>Question</Label>
             <Input
@@ -87,30 +121,55 @@ export default class AddQuestionForm extends Component {
               value={this.state.correctAnswer}
             />
           </FormField>
+          {this.state.wrongAnswers.map((ans, i) => (
+            <FormField key={i}>
+              <Label>Wrong Answer {i + 1}</Label>
+
+              <Input
+                fluid
+                id={i}
+                placeholder='Wrong Answer'
+                name="wrongAnswer"
+                onChange={this.handleWrongAnswerChange}
+                value={this.state.wrongAnswers[i]}
+                icon={(
+                  <Icon
+                    name="times"
+                    deletewronganswerid={i}
+                    color="red"
+                    onClick={this.removeWrongAnswer}
+                    inverted
+                    circular
+                    link
+                  />
+                )}
+              />
+
+            </FormField>
+          ))}
+        </Form>
+        <Form onSubmit={this.onAddWrongAnswer}>
           <FormField>
-            <Label>Wrong Answer</Label>
+            <Label>Add Wrong Answer</Label>
             <Input
               fluid
-              placeholder='Wrong Answer'
-              name="wrongAnswer1"
+              placeholder='add wrong answer...'
+              actionPosition="left"
+              action={{icon: 'plus', color: 'blue'}}
+              name="wrongAnswer"
               onChange={this.handleChange}
-              value={this.state.wrongAnswer1}
+              value={this.state.wrongAnswer}
             />
-          </FormField>
-          <FormField>
-            <Label>Wrong Answer</Label>
-            <Input
-              fluid
-              placeholder='Wrong Answer'
-              name="wrongAnswer3"
-              onChange={this.handleChange}
-              value={this.state.wrongAnswer3}
-            />
-          </FormField>
-          <FormField>
-            <Button type="submit" fluid primary size="large">Add Question</Button>
           </FormField>
         </Form>
+          <FormField>
+            <Button
+              type="submit"
+              fluid
+              primary
+              size="large"
+              onClick={this.onAddQuestion}>Add Question</Button>
+          </FormField>
       </Wrapper>
     )
   }

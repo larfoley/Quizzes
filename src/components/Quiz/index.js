@@ -85,7 +85,7 @@ export default class Quiz extends Component {
     return (
       <div>
         {!this.state.quizIsFinished?
-          <React.Fragment>
+          <div style={{marginTop: "2em"}}>
             <span>Question {questionIndex + 1 } of {questions.length}</span>
             <Question>{currentQuestion}</Question>
             {currentAnswers.map((ans, i) => (
@@ -106,7 +106,7 @@ export default class Quiz extends Component {
                 :
                 <Button onClick={this.nextQuestion.bind(this)}>Finish Quiz</Button>
               ) : null }
-            </React.Fragment>
+            </div>
           : (
             <QuizResults
               results={this.state.answeredQuestions}

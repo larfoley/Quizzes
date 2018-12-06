@@ -7,6 +7,10 @@ const StyledInput = styled(Input)`
     border: none !important;
     padding: 1.1em !important;
     background-color: ${css.bgColor} !important;
+
+    &~i {
+      top: .70em !important
+    }
   }
 
   &&& button {

@@ -6,12 +6,12 @@ import Title from './Title'
 import Description from './Description'
 // import Author from './Author'
 
-const QuizItem = ({name, description, quizID}) => {
-
+const QuizItem = ({name, description, quizID, tags}) => {
+  tags = tags.map(tag => tag.tagName)
   return (
-    <Wrapper quizID={quizID}>
-      <Title>{name}</Title>
-      <TagList inline="true" tags={["java", "computer science"]}/>
+    <Wrapper>
+      <Title quizID={quizID} title={name}/>
+      <TagList tags={tags}/>
       <Description>{description}</Description>
     </Wrapper>
   )

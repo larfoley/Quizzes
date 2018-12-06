@@ -8,7 +8,6 @@ const StyledBox = styled(Box)`
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 2em;
-  padding: 0;
 
   @media screen and (min-width: 700px) {
     ${'' /* width: 45%;
@@ -36,9 +35,7 @@ const StyledLink = styled(Link)`
 
 const Wrapper = ( { children, quizID }) => (
   <StyledBox>
-    <StyledLink to={"/quiz/" + quizID}>
-      {children}
-    </StyledLink>
+    {children}
   </StyledBox>
 )
 

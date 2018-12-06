@@ -22,7 +22,7 @@ class QuizPreviewPage extends React.Component {
 
   render() {
     const quiz = this.state.quiz
-
+    console.log('q', quiz);
     return (
       <Main>
         <PageContainer>
