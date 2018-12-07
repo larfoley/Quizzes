@@ -3,6 +3,9 @@ import Box from 'components/Box'
 import { Form, Input, Label, FormField } from 'components/Form'
 import Button from 'components/Button'
 import Auth from 'components/Auth'
+import { Message } from "semantic-ui-react"
+import { NotificationManager } from 'react-notifications'
+import { Redirect } from 'react-router-dom'
 
 export default class LoginForm extends Component {
 
@@ -14,6 +17,7 @@ export default class LoginForm extends Component {
       password: "",
       submitting: false,
       error: null,
+      succesfullyLoggedin: false
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -24,10 +28,14 @@ export default class LoginForm extends Component {
     const username = this.state.username
     const password = this.state.password
 
-    this.auth.authenticateUser(username, password, (err, res) => {
-      if (err) { return alert(err) }
-      alert("Logged In")
-      console.log(res);
+    this.setState({submitting: true})
+    this.auth.authenticateUser(username, password, (error, res) => {
+      if (error) {
+        this.setState({submitting: false, error})
+      } else {
+        this.setState({submitting: false, succesfullyLoggedin: true})
+        NotificationManager.success('Logged In')
+      }
     })
   }
 
@@ -43,36 +51,47 @@ export default class LoginForm extends Component {
 
   render() {
     return (
-      <Box style={{maxWidth: "600px", margin: "2em auto"}}>
-        <Form onSubmit={this.handleSubmit}>
-          {this.state.error? <p>{this.state.error.message}</p> : null}
-          <h2>Login</h2>
-          <FormField>
-            <Label>Username</Label>
-            <Input
-              name="username"
-              disabled={this.submitting}
-              onChange={this.handleChange}
-              value={this.state.username}
-              fluid
-            />
-          </FormField>
-          <FormField>
-            <Label>Password</Label>
-            <Input
-              type="password"
-              name="password"
-              onChange={this.handleChange}
-              value={this.state.password}
-              disabled={this.submitting}
-              fluid
-            />
-          </FormField>
-          <Button disabled={this.submitting}>Submit</Button>
-        </Form>
 
+      this.state.succesfullyLoggedin? <Redirect to="/" /> :
 
-      </Box>
+        <Box style={{maxWidth: "600px", margin: "2em auto"}}>
+          <Form onSubmit={this.handleSubmit}>
+            {this.state.error?
+              <Message negative>
+                <Message.Header>Login Failed</Message.Header>
+                <p>{this.state.error.message}</p>
+              </Message>
+             : null}
+            <h2>Login</h2>
+            <FormField>
+              <Label>Username</Label>
+              <Input
+                name="username"
+                disabled={this.submitting}
+                onChange={this.handleChange}
+                value={this.state.username}
+                fluid
+                required
+              />
+            </FormField>
+            <FormField>
+              <Label>Password</Label>
+              <Input
+                type="password"
+                name="password"
+                onChange={this.handleChange}
+                value={this.state.password}
+                disabled={this.submitting}
+                fluid
+                required
+              />
+            </FormField>
+            <Button disabled={this.submitting} type="submit">
+              {this.state.submitting? "Submitting..." : "Submit"}
+            </Button>
+          </Form>
+        </Box>
     )
   }
+
 }

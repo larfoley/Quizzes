@@ -4,6 +4,7 @@ import { Form, Input, Label, FormField } from 'components/Form'
 import Button from 'components/Button'
 import { Link } from 'react-router-dom'
 import Auth from 'components/Auth'
+import { Message } from 'semantic-ui-react'
 
 const auth = new Auth()
 
@@ -28,12 +29,12 @@ export default class RegisterForm extends Component {
     e.preventDefault()
     this.setState({submitting: true})
     const { userName, email, password, confirmPassword } = this.state
-  
-    auth.registerUser({ userName, email, password, confirmPassword }, (err) => {
-      if (err) {
-        this.setState({error: err})
+
+    auth.registerUser({ userName, email, password, confirmPassword }, error => {
+      if (error) {
+        this.setState({ error, submitting: false })
       } else {
-        this.setState({succesfullyRegistered: true})
+        this.setState({succesfullyRegistered: true, submitting: false})
       }
     })
   }
@@ -57,7 +58,12 @@ export default class RegisterForm extends Component {
           </div>
         ) : (
           <Form onSubmit={this.handleSubmit}>
-            {this.state.error? <p>{this.state.error.message}</p> : null}
+            {this.state.error?
+              <Message negative>
+                <Message.Header>Registration Failed</Message.Header>
+                <p>{this.state.error.message}</p>
+              </Message>
+             : null}
             <h2>Register</h2>
             <FormField>
               <Label>Email</Label>
@@ -67,6 +73,7 @@ export default class RegisterForm extends Component {
                 onChange={this.handleChange}
                 value={this.state.email}
                 fluid
+                required
               />
             </FormField>
             <FormField>
@@ -77,6 +84,7 @@ export default class RegisterForm extends Component {
                 onChange={this.handleChange}
                 value={this.state.userName}
                 fluid
+                required
               />
             </FormField>
             <FormField>
@@ -88,21 +96,24 @@ export default class RegisterForm extends Component {
                 value={this.state.password}
                 disabled={this.submitting}
                 fluid
+                required
               />
             </FormField>
             <FormField>
               <Label>Confirm Password</Label>
               <Input
-
                 type="password"
                 name="confirmPassword"
                 onChange={this.handleChange}
                 value={this.state.confirmPassword}
                 disabled={this.submitting}
                 fluid
+                required
               />
             </FormField>
-            <Button fluid size="huge" disabled={this.submitting}>Register</Button>
+            <Button fluid size="huge" disabled={this.state.submitting}>
+              {this.state.submitting? "Submitting..." : "Register"}
+            </Button>
           </Form>
         )}
 

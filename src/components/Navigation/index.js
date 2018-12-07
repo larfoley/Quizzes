@@ -45,7 +45,7 @@ const StyledDropdown = styled(Dropdown)`
 const redirect = (history, path) => () => history.push(path)
 
 const DropdownLink = () => (
-  <Route render={({ history}) => (
+  <Route render={({ history }) => (
     <StyledDropdown
       trigger={<Icon name="user" size="large"/>}
       options={

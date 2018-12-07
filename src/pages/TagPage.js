@@ -1,11 +1,12 @@
 import React from 'react'
-import PageContainer from 'components/PageContainer'
+import axios from 'axios'
+import { Icon } from "semantic-ui-react"
 import Box from 'components/Box'
 import TagList from 'components/TagList'
+import PageContainer from 'components/PageContainer'
 import Navigation from 'components/Navigation'
-import axios from 'axios'
 import PageHeader from 'components/PageHeader'
-import { Icon } from "semantic-ui-react"
+import QuizList from 'components/QuizList'
 
 export default class TagPage extends React.Component {
   constructor(props) {
@@ -27,10 +28,8 @@ export default class TagPage extends React.Component {
           <h1><Icon name="tag"/> {this.props.match.params.tagName.toUpperCase()} QUIZZES</h1>
         </PageHeader>
         <PageContainer>
-          <Box>
+            <QuizList quizzes={this.state.quizzes}/>
 
-
-          </Box>
         </PageContainer>
       </div>
     )

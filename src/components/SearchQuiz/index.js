@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Form }from 'semantic-ui-react'
-// import QuizList from 'components/QuizList'
+import QuizList from 'components/QuizList'
 import SearchBar from './SearchBar'
 import quizzes from 'mock-quizzes.js'
+import axios from 'axios'
 
 
 export default class SearchQuiz extends Component {
@@ -13,17 +14,26 @@ export default class SearchQuiz extends Component {
       searchResults: [],
       loading: false
     }
-
-    console.log(this.state);
-
   }
 
   onSearch(e) {
     e.preventDefault()
     this.setState({loading: true})
-    setTimeout(() => {
-      this.setState({searchResults: quizzes, loading: false })
-    }, 1000)
+    axios.get('/api/quizzes/' + this.state.searchTerm)
+      .then(res => {
+        const quizzes = res.data
+        console.log(quizzes);
+        this.setState({searchResults: quizzes, loading: false, searchTerm: "" })
+        return res
+      })
+      .catch(err => {
+        console.log(err)
+      })
+      .then(res => {
+        console.log("res", res);
+        this.setState({searchTerm: "", searchResults: [] })
+      })
+
   }
 
   handleChange(e) {
@@ -39,10 +49,10 @@ export default class SearchQuiz extends Component {
             onChange={this.handleChange.bind(this)}
           />
         </Form>
-        {/* <QuizList
+        {this.state.searchResults? <QuizList
           quizzes={this.state.searchResults}
           loading={this.state.loading}
-        /> */}
+        /> : null}
       </React.Fragment>
     )
   }

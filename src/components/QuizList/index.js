@@ -3,6 +3,9 @@ import axios from 'axios'
 import QuizItem from './QuizItem'
 import PropTypes from 'prop-types'
 import { Loader } from 'semantic-ui-react'
+import Auth from 'components/Auth'
+
+const auth = new Auth()
 
 class QuizList extends React.Component {
   constructor() {
@@ -16,7 +19,12 @@ class QuizList extends React.Component {
 
   componentWillMount() {
     this.setState({loading: true})
-    axios.get('/api/quizzes')
+    axios({
+      url: "/api/quizzes",
+      headers: {
+        'Authorization': auth.getAccessToken()
+      }
+    })
       .then((res) => {
         const quizzes = res.data || []
         this.setState({quizzes: quizzes, loading: false})
@@ -37,7 +45,7 @@ class QuizList extends React.Component {
           {this.state.quizzes.map((quiz, i) => (
             <QuizItem
               key={i}
-              quizID={quiz._id}
+              quizID={quiz.id}
               name={quiz.name}
               description={quiz.description}
               author={quiz.author}

@@ -16,7 +16,7 @@ export default class CreateQuizForm extends Component {
     super()
     this.state = {
       questionID: 1,
-      questions: [],
+      questions: [{question: "What is foo?", answers: [{answer: "foo", isCorrect: true}, {answer: "bar", isCorrect: false}]}],
       tags: [],
       question: "",
       name: "",
@@ -33,43 +33,62 @@ export default class CreateQuizForm extends Component {
     this.toggleModal = this.toggleModal.bind(this)
   }
 
-  postQuiz(e) {
-    e.preventDefault()
-    const quiz = {
-      name: "Test",
-      description: "test quiz",
-      questions: [
-        {
-          questionName: "What?",
-          answers: [
-            {
-              Name: "a",
-              isCorrect: true
-            },
-            {
-              Name: "b",
-              isCorrect: true
-            }
-          ]
-        }
-      ],
-      tags: [
-        {tagName: "java"}
-      ]
+  validateInput() {
+    const { name, questions, description, tags } = this.state
+
+    if (name === "") {
+      NotificationManager.warning("You have not given your quiz a name.")
+      return false
     }
 
-    // axios({
-    //   method: 'post',
-    //   url: '/api/Quizzes',
-    //   data: quiz
-    // })
-    // .then(res => {
-    //   console.log(res.data)
-    // })
-    // .catch(err => {
-    //   console.log(err)
-    // })
-    console.log(this.state.questions);
+    if (questions.length === 0) {
+      NotificationManager.warning("You must have at least one question.")
+      return false
+    }
+
+    for (let i = 0; i < questions.length; i++) {
+      let question = questions[i]
+
+      if (question.question == "") {
+        return false
+      }
+
+      if (question.answers.length === 0) {
+        return false
+      }
+
+      if (!!question.answers.find(answer => answer.isCorrect)) {
+        return false
+      }
+
+      if (!!question.answers.find(answer => !answer.isCorrect)) {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  postQuiz() {
+    if (!this.validateInput()) {
+      return
+    }
+    const { name, questions, description, tags } = this.state
+
+    const quiz = {
+      name,
+      description,
+      questions,
+      tags
+    }
+
+    axios.post("/api/Quizzes", quiz)
+    .then(res => {
+      console.log(res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }
 
   updateQuiz(callback) {
@@ -81,7 +100,7 @@ export default class CreateQuizForm extends Component {
     const value = event.target.value
 
     this.setState(prevState => {
-      prevState[name] = value
+      prevState[name] = value.trim()
       return prevState
     })
   }
@@ -94,10 +113,7 @@ export default class CreateQuizForm extends Component {
         if (!tags.find(tag => tag === this.state.tag)) {
           prevState.tags.push(this.state.tag)
           prevState.tag = ""
-          console.log(prevState);
           return prevState
-        } else {
-
         }
       })
     }
@@ -146,11 +162,17 @@ export default class CreateQuizForm extends Component {
         <Form onSubmit={this.handleSubmit}>
           <FormField>
             <Label>Name *</Label>
-            <Input fluid placeholder='Quiz Name' />
+            <Input
+              name="name"
+              fluid
+              placeholder='Quiz Name'
+              onChange={this.handleInputChange}
+              required
+            />
           </FormField>
           <FormField>
             <Label>Description <small>(Optional)</small></Label>
-            <TextArea placeholder='Quiz Description' />
+            <TextArea name="description" placeholder='Quiz Description' onChange={this.handleInputChange} />
           </FormField>
         </Form>
 
@@ -170,31 +192,84 @@ export default class CreateQuizForm extends Component {
           </FormField>
         </Form>
 
-        <FormField>
-          <Label>Questions</Label>
-          <Modal
-            trigger={(
-              <Form.Field>
-                <Button fluid size="huge" onClick={this.toggleModal} primary>
-                  <Icon name="plus"/> Add Question
-                </Button>
-              </Form.Field>
-            )}
-            open={this.state.modalIsOpen}
-            onClose={this.toggleModal.bind(this)}
-            basic
-            size='small'
-          >
-            <Modal.Content>
-              <AddQuestionForm updateQuiz={this.updateQuiz.bind(this)}/>
-            </Modal.Content>
-          </Modal>
+        <Form>
+          <FormField>
+            <Label>Questions</Label>
+            <Modal
+              trigger={(
+                <Form.Field>
+                  <Button fluid size="huge" onClick={this.toggleModal} primary>
+                    <Icon name="plus"/> Add Question
+                  </Button>
+                </Form.Field>
+              )}
+              open={this.state.modalIsOpen}
+              onClose={this.toggleModal.bind(this)}
+              basic
+              size='small'
+            >
+              <Modal.Content>
+                <AddQuestionForm updateQuiz={this.updateQuiz.bind(this)}/>
+              </Modal.Content>
+            </Modal>
+          </FormField>
+        </Form>
 
-        </FormField>
-        {questions.map((q, key)=> <h3 key={key}>{q.question}</h3>)}
+        {questions.map((q, questionKey)=> {
+          const correctAnswer = q.answers.find(ans => ans.isCorrect).answer
+
+          return (
+            <div key={"question " + questionKey}>
+              <h3>Question {questionKey + 1}</h3>
+
+              <h3>{q.question}</h3>
+              <h5>Correct Answer</h5>
+              <h4><Input fluid value={correctAnswer} onChange={(e) => {
+                const value = e.target.value
+                this.setState(prevState => {
+                  prevState.questions[questionKey].answers = prevState
+                    .questions[questionKey]
+                    .answers.map(ans => {
+                      if (ans.isCorrect) {
+                        ans.answer = value
+                      }
+                      return ans
+                  })
+                  return prevState
+                })
+              }}/></h4>
+              <h5>Wrong Answers</h5>
+              {q.answers.map((ans, answerKey) => (
+
+                !ans.isCorrect ? (
+                  <FormField key={"answer " + answerKey}>
+                    <Input fluid  value={ans.answer} onChange={(e) => {
+                      const value = e.target.value
+                      this.setState(prevState => {
+                        prevState.questions[questionKey].answers[answerKey].answer = value
+                        return prevState
+                      })
+                    }}/>
+                  </FormField>
+                ) : null
+
+              ))}
+              <FormField>
+                <Button onClick={() => {
+                  const question = this.state.questions[questionKey]
+                  this.setState(prevState => {
+                    prevState.questions.splice(questionKey, 1)
+                    return prevState
+                  })
+
+                }}>Delete Question</Button>
+              </FormField>
+            </div>
+          )
+        })}
 
         <Button fluid size="huge" onClick={this.postQuiz.bind(this)} primary>
-          <Icon name="plus" onClick={this.postQuiz.bind(this)}/> Save Quiz
+          Publish Quiz
         </Button>
       </Box>
     )

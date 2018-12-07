@@ -21,30 +21,10 @@ import {
 
 class App extends React.Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      user: false
-    }
-  }
-
-
-  registerUser() {
-    window.alert("reg")
-  }
-
-  componentWillMount() {
-    if (sessionStorage.user) {
-      this.setState({user: true})
-    }
-  }
-
   render = () => (
     <BrowserRouter>
       <div>
-        <Route exact path="/" render={props => (
-          <HomePage user={this.state.user} />
-        )} />
+        <Route exact path="/" component={HomePage} />
         <Route exact path="/register" component={RegisterPage}/>
         <Route exact path="/login" component={LoginPage} />
         <Route path="/landing" component={LandingPage} />

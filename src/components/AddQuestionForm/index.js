@@ -30,8 +30,31 @@ export default class AddQuestionForm extends Component {
     this.removeWrongAnswer = this.removeWrongAnswer.bind(this)
   }
 
+  validateInput() {
+    const { question, correctAnswer, wrongAnswers } = this.state
+
+    if (question === "") {
+      NotificationManager.warning("You must enter a question.")
+      return false
+    }
+
+    if (correctAnswer === "") {
+      NotificationManager.warning("You must enter a correct answer.")
+      return false
+    }
+
+    if (wrongAnswers.length === 0) {
+      NotificationManager.warning("You must have at least one wrong answer.")
+      return false
+    }
+
+    return true
+  }
+
   onAddQuestion() {
-    const {
+    if (!this.validateInput()) {return}
+    
+    let {
       question,
       correctAnswer,
       wrongAnswers
@@ -42,7 +65,11 @@ export default class AddQuestionForm extends Component {
       answers: [{answer: correctAnswer, isCorrect: true}]
     }
 
-    newQuestion.answers.concat(wrongAnswers)
+    wrongAnswers = wrongAnswers.map(ans => {
+      return {answer: ans, isCorrect: false}
+    })
+
+    newQuestion.answers = newQuestion.answers.concat(wrongAnswers)
 
     this.props.updateQuiz(prevState => {
       prevState.questions.push(newQuestion)
@@ -60,7 +87,7 @@ export default class AddQuestionForm extends Component {
       NotificationManager.info("You did not enter a wrong answer!")
     } else {
       this.setState(prevState => {
-        prevState.wrongAnswers.push(prevState.wrongAnswer)
+        prevState.wrongAnswers.push(this.state.wrongAnswer)
         prevState.wrongAnswer = ""
         return prevState
       })

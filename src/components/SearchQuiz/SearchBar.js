@@ -6,8 +6,8 @@ const SearchBar = props => (
     action={{icon: 'search'}}
     actionPosition='left'
     placeholder='Search for a Quiz...'
-    value={props.searchTerm}
-    onChange={props.handleChange}
+    value={props.value}
+    onChange={props.onChange}
   />
 )
 
