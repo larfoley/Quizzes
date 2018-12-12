@@ -8,27 +8,31 @@ const StyledLink = styled(Link)`
   margin-right: 1em;
   display: ${props => props.display? props.display : "inline"};
   margin-bottom: 1em;
+  font-size: 1.1em;
 `
 
 const Wrapper = styled.div`
   margin-bottom: 1em;
 `
 
-const Tag = props => (
+const Tag = ({ name, displayName, inline }) => (
   <StyledLink
-    inline={props.inline}
-    to={`/tags/${props.name}`}>
-    #{props.displayName}
+    inline={inline}
+    to={`/tags/${name}`}>
+    #{displayName}
   </StyledLink>
 )
 
-const TagList = props => (
-  <Wrapper>
-    {props.tags.map((tag, key) => (
-      <Tag inline={props.inline} key={key} name={tag} displayName={tag}/>
-    ))}
-  </Wrapper>
-)
+const TagList = ({ tags, inline }) => {
+  console.log(tags);
+  return (
+    <Wrapper>
+      {tags.map((tag, key) => (
+        <Tag inline={inline} key={key} name={tag.tagName} displayName={tag.displayName}/>
+      ))}
+    </Wrapper>
+  )
+}
 
 TagList.propTypes = {
   tags: PropTypes.array,

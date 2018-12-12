@@ -53,7 +53,7 @@ export default class AddQuestionForm extends Component {
 
   onAddQuestion() {
     if (!this.validateInput()) {return}
-    
+
     let {
       question,
       correctAnswer,
@@ -61,12 +61,12 @@ export default class AddQuestionForm extends Component {
     } = this.state
 
     const newQuestion = {
-      question,
-      answers: [{answer: correctAnswer, isCorrect: true}]
+      questionName: question,
+      answers: [{name: correctAnswer, isCorrect: true}]
     }
 
     wrongAnswers = wrongAnswers.map(ans => {
-      return {answer: ans, isCorrect: false}
+      return {name: ans, isCorrect: false}
     })
 
     newQuestion.answers = newQuestion.answers.concat(wrongAnswers)
@@ -83,7 +83,7 @@ export default class AddQuestionForm extends Component {
     event.preventDefault()
     if (this.state.wrongAnswers.length >= 5) {
       NotificationManager.info("You are only allowed to add up to 5 wrong answers!")
-    } else if (this.state.wrongAnswer.trim() == "") {
+    } else if (this.state.wrongAnswer.trim() === "") {
       NotificationManager.info("You did not enter a wrong answer!")
     } else {
       this.setState(prevState => {
@@ -114,7 +114,7 @@ export default class AddQuestionForm extends Component {
   }
 
   removeWrongAnswer(e) {
-    const id = parseInt(e.target.getAttribute('deletewronganswerid'))
+    const id = parseInt(e.target.getAttribute('deletewronganswerid'), 10)
 
     this.setState(prevState => {
       prevState.wrongAnswers = prevState.wrongAnswers.filter((ans, i) => i !== id)

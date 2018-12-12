@@ -1,8 +1,6 @@
 import React from 'react'
 import axios from 'axios'
 import { Icon } from "semantic-ui-react"
-import Box from 'components/Box'
-import TagList from 'components/TagList'
 import PageContainer from 'components/PageContainer'
 import Navigation from 'components/Navigation'
 import PageHeader from 'components/PageHeader'
@@ -15,21 +13,26 @@ export default class TagPage extends React.Component {
   }
 
   componentWillMount() {
-    axios.get(`/api/quizzes/${this.props.tagName}`)
-      .then(res => this.setState({quizzes: res.data}))
+    axios.get(`/api/quizzes/tag/${this.props.match.params.tagName}`)
+      .then(res => {
+        return res.data.map(tag => {
+          return tag.quizzes[0]
+        })
+      })
+      .then(quizzes => this.setState({ quizzes }))
       .catch(err => console.log)
   }
 
   render() {
+
     return (
       <div>
-        <Navigation userIsAuthenticated={this.props.user}/>
+        <Navigation />
         <PageHeader>
           <h1><Icon name="tag"/> {this.props.match.params.tagName.toUpperCase()} QUIZZES</h1>
         </PageHeader>
         <PageContainer>
             <QuizList quizzes={this.state.quizzes}/>
-
         </PageContainer>
       </div>
     )

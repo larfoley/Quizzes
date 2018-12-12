@@ -2,42 +2,38 @@ import React, { Component } from 'react'
 import { Form }from 'semantic-ui-react'
 import QuizList from 'components/QuizList'
 import SearchBar from './SearchBar'
-import quizzes from 'mock-quizzes.js'
 import axios from 'axios'
-
+import { Loader } from 'semantic-ui-react'
 
 export default class SearchQuiz extends Component {
   constructor(props) {
     super()
     this.state = {
       searchTerm: "",
-      searchResults: [],
+      searchResults: null,
       loading: false
     }
   }
 
   onSearch(e) {
     e.preventDefault()
+    if (this.state.searchTerm.length === 0) {
+      return
+    }
     this.setState({loading: true})
-    axios.get('/api/quizzes/' + this.state.searchTerm)
-      .then(res => {
-        const quizzes = res.data
-        console.log(quizzes);
-        this.setState({searchResults: quizzes, loading: false, searchTerm: "" })
-        return res
+    axios.get('/api/quizzes/search/' + this.state.searchTerm)
+      .then(({ quizzes }) => {
+        this.setState(
+          {searchResults: quizzes, loading: false, searchTerm: ""}
+        )
       })
       .catch(err => {
         console.log(err)
       })
-      .then(res => {
-        console.log("res", res);
-        this.setState({searchTerm: "", searchResults: [] })
-      })
-
   }
 
   handleChange(e) {
-    this.setState({searchTerm: e.target.value})
+    this.setState({searchTerm: e.target.value.trim()})
   }
 
   render() {
@@ -49,6 +45,7 @@ export default class SearchQuiz extends Component {
             onChange={this.handleChange.bind(this)}
           />
         </Form>
+        <Loader active={this.state.loading}>Loading</Loader>
         {this.state.searchResults? <QuizList
           quizzes={this.state.searchResults}
           loading={this.state.loading}

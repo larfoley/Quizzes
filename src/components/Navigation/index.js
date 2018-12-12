@@ -60,7 +60,7 @@ const DropdownLink = () => (
             key: 'profile',
             text: 'Profile',
             icon: 'user',
-            onClick: redirect(history, '/profile')
+            onClick: redirect(history, `/uesr/${auth.getUserName()}`)
           },
           {
             key: 'settings',
@@ -90,63 +90,58 @@ const Logo = styled(Link)`
   line-height: 70px;
 `
 
-const Navigation = props => (
-  <StyledNav noShadow={props.noShadow}>
-    <PageContainer>
-    <Grid columns='equal'>
-      <Grid.Column width={5}>
-        <Logo to="/">
-        Quizzes
-      </Logo>
-      </Grid.Column>
-      <Grid.Column textAlign="right">
-        {/* <Link to="/create-quiz">
-          <Icon name="plus" /> New Quiz
-        </Link> */}
-        <Link to="/create-quiz">
-          <Button primary><Icon name="plus"/> Create Quiz</Button>
-        </Link>
+class Navigation extends React.Component {
 
-        <Link to="/search">
-          <Icon name="search" size="large"/>
-        </Link>
-
-        <Link to="/tags">
-          <Icon name="tag" size="large"/>
-        </Link>
-
-        {!auth.isAuthenticated()? (
-          <React.Fragment>
-            <Link to="/login">
-              Login
-            </Link>
-            <Link to="/register">
-              Register
-            </Link>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-
-            <React.Fragment>
-              <Link to="/login">
-                Login
-              </Link>
-              <Link to="/register">
-                Register
-              </Link>
-            </React.Fragment>
-
-            <DropdownLink />
+  render() {
+    return (
+      <StyledNav noShadow={this.props.noShadow}>
+        <PageContainer>
+        <Grid columns='equal'>
+          <Grid.Column width={5}>
+            <Logo to="/">
+            Quizzes
+          </Logo>
+          </Grid.Column>
+          <Grid.Column textAlign="right">
 
             <Link to="/create-quiz">
-              <Icon name="sign-out" size="large"/>
+              <Button primary><Icon name="plus"/> Create Quiz</Button>
             </Link>
-          </React.Fragment>
-        )}
-      </Grid.Column>
-    </Grid>
-  </PageContainer>
-  </StyledNav>
-)
+
+            <Link to="/search">
+              <Icon name="search" size="large"/>
+            </Link>
+
+            <Link to="/tags">
+              <Icon name="tag" size="large"/>
+            </Link>
+
+            {}
+            {!auth.isAuthenticated()? (
+              <React.Fragment>
+                <Link to="/login">
+                  Login
+                </Link>
+                <Link to="/register">
+                  Register
+                </Link>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+
+                <DropdownLink />
+
+                <Link to="/logout">
+                  <Icon name="sign-out" size="large"/>
+                </Link>
+              </React.Fragment>
+            )}
+          </Grid.Column>
+        </Grid>
+      </PageContainer>
+      </StyledNav>
+    )
+  }
+}
 
 export default Navigation

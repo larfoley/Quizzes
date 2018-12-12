@@ -20,12 +20,44 @@ class Auth {
       }
     })
     .then(res => {
-      localStorage.setItem('token', JSON.stringify(res))
-      callback(null)
+      const date = new Date()
+      const tokenExpiryTime = date.setTime(date.getTime()+( parseInt(res.expires_in, 10) * 1000));
+
+      window.localStorage.setItem('token', JSON.stringify(res))
+      window.localStorage.setItem('tokenExpiryTime', JSON.stringify(tokenExpiryTime))
     })
+    // .then(res => {
+    //   axios.get(`/api/users/${username}`)
+    //     .then(res => {
+    //       window.localStorage.setItem('user', JSON.stringify(res.data))
+    //       callback(null)
+    //     })
+    //     .catch(err => {
+    //       console.log(err.response);
+    //     })
+    // })
     .catch(error => {
       callback(error)
     })
+
+  }
+
+  isAuthenticated() {
+    const token = window.localStorage.getItem('token')
+    const tokenExpiryTime = window.localStorage.getItem('tokenExpiryTime')
+
+    if (token && tokenExpiryTime) {
+      const expiryTime = parseInt(JSON.parse(tokenExpiryTime), 10)
+      if (new Date().getTime() > expiryTime) {
+        // Token expired so remove it from local storage
+        window.localStorage.removeItem('token')
+        window.localStorage.removeItem('tokenExpiryTime')
+        return false
+      } else {
+        return true
+      }
+    }
+    return false
 
   }
 
@@ -45,16 +77,21 @@ class Auth {
   }
 
   getAccessToken() {
-    const token = JSON.parse(window.localStorage.getItem('token'))
-    return token.token_type + " " + token.access_token
+    let token = window.localStorage.getItem('token')
+    if (token) {
+      token = JSON.parse(token)
+      return token.token_type + " " + token.access_token
+    }
   }
 
-  isAuthenticated() {
-    return !!window.localStorage.getItem('token')
+  getUserName() {
+    return window.localStorage.getItem('username')
   }
 
   logout() {
-    localStorage.removeItem('token')
+    window.localStorage.removeItem('token')
+    window.localStorage.removeItem('tokenExpiryTime')
+    window.localStorage.removeItem('user')
   }
 
 }

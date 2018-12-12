@@ -16,9 +16,9 @@ const StyledH2 = styled.h2`
   text-overflow: ellipsis;
   white-space: nowrap; */}
 `
-const Title = ({ quizID, title }) =>  (
+const Title = ({ quizId, title }) =>  (
   <StyledH2>
-    <StyledLink to={"/quiz/" + quizID}>
+    <StyledLink to={"/quiz/" + quizId}>
       {title}
     </StyledLink>
   </StyledH2>

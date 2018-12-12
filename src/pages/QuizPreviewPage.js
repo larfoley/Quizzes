@@ -13,7 +13,6 @@ class QuizPreviewPage extends React.Component {
 
   componentWillMount() {
     const quizId = this.props.match.params.id
-    console.log(quizId);
     axios.get(`/api/quizzes/${quizId}`)
       .then(res => this.setState({quiz: res.data}))
       .catch(err => console.log)
@@ -22,7 +21,7 @@ class QuizPreviewPage extends React.Component {
 
   render() {
     const quiz = this.state.quiz
-    console.log('q', quiz);
+    
     return (
       <Main>
         <PageContainer>

@@ -1,16 +1,19 @@
 import React from 'react'
 import PageContainer from 'components/PageContainer'
-import QuizList from 'components/QuizList'
 import Navigation from 'components/Navigation'
-import quizzes from 'mock-quizzes'
+import UsersQuizzes from 'components/UsersQuizzes'
+import PageHeader from 'components/PageHeader'
 
-const Home = props => (
+const DashboardPage = props => (
   <div>
-    <Navigation userIsAuthenticated={props.user}/>
+    <Navigation />
+    <PageHeader>
+      <h1>Dashboard</h1>
+    </PageHeader>
     <PageContainer>
-      <QuizList quizzes={quizzes} />
+      <UsersQuizzes />
     </PageContainer>
   </div>
 )
 
-export default Home
+export default DashboardPage

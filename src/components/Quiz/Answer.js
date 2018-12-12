@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import css from 'css.js'
 
 const Answer = styled.li`
   border-radius: 5px;

@@ -8,6 +8,7 @@ const SearchBar = props => (
     placeholder='Search for a Quiz...'
     value={props.value}
     onChange={props.onChange}
+    autoFocus={true}
   />
 )
 

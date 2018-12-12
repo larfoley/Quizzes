@@ -1,12 +1,11 @@
 import styled from 'styled-components'
 import { Input }  from 'semantic-ui-react'
-import css from 'css.js'
 
 const StyledInput = styled(Input)`
   width: 100%;
   margin-bottom: 2em;
   margin-top: 2em;
-  
+
   &&&& .button {
     background-color: var(--primary-color);
     color: white;

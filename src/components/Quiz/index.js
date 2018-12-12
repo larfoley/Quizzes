@@ -3,6 +3,7 @@ import Button from 'components/Button'
 import Question from './Question'
 import Answer from './Answer'
 import QuizResults from './QuizResults'
+// import axios from 'axios'
 
 export default class Quiz extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ export default class Quiz extends Component {
     }
     this.playAgain = this.playAgain.bind(this)
   }
+
 
   getCurrentQuestion() {
     return this.state.questions[this.state.questionIndex]
@@ -80,8 +82,9 @@ export default class Quiz extends Component {
   render() {
     const questions = this.state.questions
     const questionIndex = this.state.questionIndex
-    const currentQuestion = questions[questionIndex].question
+    const currentQuestion = questions[questionIndex].questionName
     const currentAnswers = questions[questionIndex].answers
+    console.log("Quiz State", this.state);
     return (
       <div>
         {!this.state.quizIsFinished?
@@ -97,7 +100,7 @@ export default class Quiz extends Component {
                 answeredCorrectly={ans.answeredCorrectly}
                 isCorrect={ans.isCorrect}
                 >
-                  {ans.answer}
+                  {ans.name}
                 </Answer>
               ))}
               {this.state.questionAnswered? (

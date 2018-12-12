@@ -13,27 +13,26 @@ export default class TagsPage extends React.Component {
 
   componentWillMount() {
     axios.get("/api/tags/")
-      .then(res => this.setState({tags: res.data}))
+      .then(res => res.data.reduce((tags, tag) => {
+        if (!tags.find((item) => item.tagName === tag.tagName)) {
+    		  tags.push(tag)
+    	  }
+	      return tags
+        }, [])
+      )
+      .then(tags => this.setState({ tags }))
       .catch(err => console.log)
   }
 
   render() {
-    const tags = [
-      "computer science",
-      "programming",
-      "databases",
-      "JavaScript",
-      "Node",
-      "Functional Programming",
-      "OOP"
-    ]
+
 
     return (
       <div>
         <Navigation userIsAuthenticated={this.props.user}/>
         <PageContainer>
           <Box>
-            <TagList tags={tags} />
+            <TagList tags={this.state.tags} />
           </Box>
         </PageContainer>
       </div>

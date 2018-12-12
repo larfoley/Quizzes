@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom'
 import Auth from 'components/Auth'
 
 const auth = new Auth()
- 
+
 const QuestionWrapper = styled.div`
   background-color: #f5f5f5;
   padding: 1.5em;
@@ -31,17 +31,18 @@ export default class CreateQuizForm extends Component {
       createdQuizId: 0,
       questions: [
         {
-          question: "What is foo?",
-          answers: [{answer: "foo", isCorrect: true}, {answer: "bar", isCorrect: false}],
+          questionName: "What is foo?",
+          answers: [{name: "foo", isCorrect: true}, {name: "bar", isCorrect: false}],
 
         },
-        {question: "What is bar?", answers: [{answer: "foo", isCorrect: true}, {answer: "bar", isCorrect: false}]}
+        {questionName: "What is bar?", answers: [{name: "foo", isCorrect: true}, {name: "bar", isCorrect: false}]}
       ],
-      tags: ["java"],
+      tags: [{tagName: "java", displayName: "java"}],
       question: "",
       wrongAnswer: "",
-      name: "",
-      description: "",
+      correctAnswer: "",
+      name: "Foo Quiz",
+      description: "a quiz about foo",
       tag: "",
       modalIsOpen: false,
       submitting: false,
@@ -55,10 +56,15 @@ export default class CreateQuizForm extends Component {
   }
 
   validateInput() {
-    const { name, questions, description, tags } = this.state
+    const { name, questions, description } = this.state
 
     if (name === "") {
       NotificationManager.warning("You have not given your quiz a name.")
+      return false
+    }
+
+    if (description.length > 100) {
+      NotificationManager.warning("Quiz Description is to long.")
       return false
     }
 
@@ -70,7 +76,7 @@ export default class CreateQuizForm extends Component {
     for (let i = 0; i < questions.length; i++) {
       let question = questions[i]
 
-      if (question.question == "") {
+      if (question.question === "") {
         NotificationManager.warning(`Question ${i+1} is left blank.`)
         return false
       }
@@ -95,16 +101,27 @@ export default class CreateQuizForm extends Component {
   }
 
   postQuiz() {
-    if (!this.validateInput()) {
-      return
+    let user = window.localStorage.getItem('user')
+    let userId
+
+    if (user) {
+      userId = JSON.parse(user).userId
+    } else {
+      return console.log("Error getting user id from localStorage");
     }
+
+    if (!this.validateInput()) {
+      return false
+    }
+    
     const { name, questions, description, tags } = this.state
 
     const quiz = {
       name,
       description,
       questions,
-      tags
+      tags,
+      userId: userId
     }
 
     this.setState({submitting: true})
@@ -117,11 +134,11 @@ export default class CreateQuizForm extends Component {
       data: quiz
     })
     .then((res) => {
-      console.log(res);
       NotificationManager.success("Your Quiz has been publised")
       this.setState({submitting: false, quizSubmitted: true, createdQuizId: 1})
     })
     .catch(err => {
+      console.log(err.response);
       NotificationManager.warning(err.message)
     })
   }
@@ -142,12 +159,13 @@ export default class CreateQuizForm extends Component {
   }
 
   addTag(e) {
+    const formatTag = tag => tag.split(" ").join("-")
     e.preventDefault()
     if ((this.state.tag && this.state.tags.length < 10) && this.state.tag.length < 25) {
       this.setState(prevState => {
-        let { tags, tag } = prevState
-        if (!tags.find(tag => tag === this.state.tag)) {
-          prevState.tags.push(this.state.tag)
+        let { tags } = prevState
+        if (!tags.find(tag => tag.tagName === this.state.tag)) {
+          prevState.tags.push({tagName: formatTag(this.state.tag), displayName: this.state.tag})
           prevState.tag = ""
           return prevState
         }
@@ -158,7 +176,7 @@ export default class CreateQuizForm extends Component {
   deleteTag(e) {
     const tagName = e.target.getAttribute('data-tag-name')
     this.setState((prevState) => {
-      prevState.tags = prevState.tags.filter(tag => tag !== tagName)
+      prevState.tags = prevState.tags.filter(tag => tag.tagName !== tagName)
       return prevState
     })
   }
@@ -186,7 +204,7 @@ export default class CreateQuizForm extends Component {
           <div style={{textAlign: "center"}}>
             <h2>Your quiz has been Publised</h2>
             <p>
-              <Link to={`/quizzes/${this.state.createdQuizId}`} >
+              <Link to={`/quiz/${this.state.createdQuizId}`} >
               Click Here {" "}
             </Link>
             to view your quiz.
@@ -205,11 +223,17 @@ export default class CreateQuizForm extends Component {
                   placeholder='Quiz Name'
                   onChange={this.handleInputChange}
                   required
+                  value={this.state.name}
                 />
               </FormField>
               <FormField>
                 <Label>Description <small>(Optional)</small></Label>
-                <TextArea name="description" placeholder='Quiz Description' onChange={this.handleInputChange} />
+                <TextArea
+                  name="description"
+                  placeholder='Quiz Description'
+                  onChange={this.handleInputChange}
+                  value={this.state.description}
+                />
               </FormField>
             </Form>
 
@@ -252,7 +276,11 @@ export default class CreateQuizForm extends Component {
             </Form>
 
             {questions.map((q, questionIndex)=> {
-              const correctAnswer = q.answers.find(ans => ans.isCorrect).answer
+
+              const correctAnswer = this.state
+                .questions[questionIndex]
+                .answers.find(ans => ans.isCorrect)
+                .name
 
               return (
                 <QuestionWrapper key={"question " + questionIndex}>
@@ -261,11 +289,11 @@ export default class CreateQuizForm extends Component {
                     <Label>Question {questionIndex + 1}</Label>
                     <Input
                       fluid
-                      value={this.state.questions[questionIndex].question}
+                      value={this.state.questions[questionIndex].questionName}
                       onChange={(e) => {
                         const value = e.target.value
                         this.setState(prevState => {
-                          prevState.questions[questionIndex].question = value
+                          prevState.questions[questionIndex].questionName = value
                           return prevState
                         })
                       }}
@@ -281,7 +309,7 @@ export default class CreateQuizForm extends Component {
                         .questions[questionIndex]
                         .answers.map(ans => {
                           if (ans.isCorrect) {
-                            ans.answer = value
+                            ans.name = value
                           }
                           return ans
                         })
@@ -326,7 +354,7 @@ export default class CreateQuizForm extends Component {
                     <FormField key={"answer " + answerIndex}>
                       <Input
                         fluid
-                        value={ans.answer}
+                        value={ans.name}
                         icon={(
                           <Icon
                             name="times"
@@ -354,7 +382,7 @@ export default class CreateQuizForm extends Component {
                 <FormField>
                   {this.state.submitting? <Loader /> : (
                     <Button onClick={() => {
-                      const question = this.state.questions[questionIndex]
+
                       this.setState(prevState => {
                         prevState.questions.splice(questionIndex, 1)
                         return prevState

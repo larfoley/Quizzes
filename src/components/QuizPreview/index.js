@@ -1,17 +1,14 @@
 import React from 'react'
 import Button from 'components/Button'
-import TagList from 'components/TagList'
 import { Link } from 'react-router-dom'
 
 const QuizPreview = props => {
-  const { name, description, tags, _id } = props
-
+  const { name, description, quizId } = props
   return (
     <div>
       <h1>{name}</h1>
-      <TagList tags={tags} inline="true"/>
       <p>{description}</p>
-      <Link to={`/quiz/${_id}/start`}>
+      <Link to={`/quiz/${quizId}/start`}>
         <Button>Start</Button>
       </Link>
     </div>

@@ -27,7 +27,7 @@ export default class RegisterForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    this.setState({submitting: true})
+    this.setState({submitting: true, error: null})
     const { userName, email, password, confirmPassword } = this.state
 
     auth.registerUser({ userName, email, password, confirmPassword }, error => {
