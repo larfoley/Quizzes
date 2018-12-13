@@ -4,6 +4,9 @@ import QuizList from 'components/QuizList'
 import Navigation from 'components/Navigation'
 import axios from 'axios'
 import { Loader } from 'semantic-ui-react'
+import Auth from 'components/Auth'
+
+const auth = new Auth()
 
 export default class Home extends React.Component {
 
@@ -17,14 +20,19 @@ export default class Home extends React.Component {
   }
 
   componentWillMount() {
-    console.log(2);
-    axios.get("/api/quizzes")
+    let userId
+
+    if (auth.isAuthenticated()) {
+      const user = JSON.parse(window.localStorage.getItem("user"))
+      userId = user.userId
+    }
+
+    axios.get(`/api/quizzes?userId=${userId}`)
       .then(({ data }) => {
-        console.log(1);
+        console.log(data);
         this.setState({quizzes: data, loading: false})
       })
       .catch(error => {
-        console.log("err", error);
         console.log(error.response);
         this.setState({
           loading: false,

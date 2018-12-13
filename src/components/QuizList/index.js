@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 class QuizList extends React.Component {
 
   render() {
-    console.log(this.props.quizzes);
     return (
       <div>
         <div>
@@ -17,7 +16,10 @@ class QuizList extends React.Component {
               description={quiz.description}
               author={quiz.userName}
               tags={quiz.tags}
-              questions={quiz.questions}
+              totalQuestions={quiz.questions.length}
+              isFavorite={quiz.isFavorite}
+              timesPlayed={quiz.timesPlayed}
+              dateCreated={quiz.dateCreated}
             />
           ))}
         </div>

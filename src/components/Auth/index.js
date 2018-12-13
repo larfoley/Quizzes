@@ -26,16 +26,16 @@ class Auth {
       window.localStorage.setItem('token', JSON.stringify(res))
       window.localStorage.setItem('tokenExpiryTime', JSON.stringify(tokenExpiryTime))
     })
-    // .then(res => {
-    //   axios.get(`/api/users/${username}`)
-    //     .then(res => {
-    //       window.localStorage.setItem('user', JSON.stringify(res.data))
-    //       callback(null)
-    //     })
-    //     .catch(err => {
-    //       console.log(err.response);
-    //     })
-    // })
+    .then(res => {
+      axios.get(`/api/users/${username}`)
+        .then(res => {
+          window.localStorage.setItem('user', JSON.stringify(res.data))
+          callback(null)
+        })
+        .catch(err => {
+          console.log(err.response);
+        })
+    })
     .catch(error => {
       callback(error)
     })
@@ -85,7 +85,15 @@ class Auth {
   }
 
   getUserName() {
-    return window.localStorage.getItem('username')
+    let user = window.localStorage.getItem('user')
+    user = JSON.parse(user)
+    return user ? user.userName : null
+  }
+
+  getUserId() {
+    let user = window.localStorage.getItem('user')
+    user = JSON.parse(user)
+    return user ? user.userId : null
   }
 
   logout() {

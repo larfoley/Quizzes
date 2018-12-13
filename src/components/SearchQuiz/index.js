@@ -11,7 +11,7 @@ export default class SearchQuiz extends Component {
     this.state = {
       searchTerm: "",
       searchResults: null,
-      loading: false
+      loading: false,
     }
   }
 
@@ -22,9 +22,9 @@ export default class SearchQuiz extends Component {
     }
     this.setState({loading: true})
     axios.get('/api/quizzes/search/' + this.state.searchTerm)
-      .then(({ quizzes }) => {
+      .then(({ data }) => {
         this.setState(
-          {searchResults: quizzes, loading: false, searchTerm: ""}
+          {searchResults: data, loading: false, searchTerm: ""}
         )
       })
       .catch(err => {
@@ -33,10 +33,12 @@ export default class SearchQuiz extends Component {
   }
 
   handleChange(e) {
-    this.setState({searchTerm: e.target.value.trim()})
+    this.setState({searchTerm: e.target.value})
   }
 
   render() {
+
+
     return (
       <React.Fragment>
         <Form onSubmit={this.onSearch.bind(this) }>
@@ -46,6 +48,10 @@ export default class SearchQuiz extends Component {
           />
         </Form>
         <Loader active={this.state.loading}>Loading</Loader>
+        {
+          this.state.searchResults !== null ?
+          this.state.searchResults.length + " Quizzes found": null
+        }
         {this.state.searchResults? <QuizList
           quizzes={this.state.searchResults}
           loading={this.state.loading}

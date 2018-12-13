@@ -12,6 +12,7 @@ import DashboardPage from './DashboardPage'
 import ProfilePage from './ProfilePage'
 import SettingsPage from './SettingsPage'
 import ErrorPage from './ErrorPage'
+import EditQuizPage from './EditQuizPage'
 
 export {
   HomePage,
@@ -27,5 +28,6 @@ export {
   SettingsPage,
   DashboardPage,
   ProfilePage,
-  ErrorPage
+  ErrorPage,
+  EditQuizPage
 }

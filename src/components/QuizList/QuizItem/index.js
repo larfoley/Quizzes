@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import TagList from 'components/TagList'
 import Wrapper from './Wrapper'
 import Title from './Title'
+import ButtonLink from 'components/ButtonLink'
 import Author from './Author'
 import { Icon } from 'semantic-ui-react'
 import styled from 'styled-components'
@@ -10,6 +11,8 @@ import axios from 'axios'
 import { NotificationManager } from 'react-notifications'
 import { withRouter } from 'react-router-dom'
 import Auth from 'components/Auth'
+import MetaData from './MetaData'
+import { Grid } from 'semantic-ui-react'
 
 const auth = new Auth()
 
@@ -35,9 +38,10 @@ const FavoriteButton = withRouter(({history, onClick, isFavorite}) => {
         }}
         circular
         inverted
-        color={isFavorite ? "red" : null}
+        color={isFavorite ? "red" : "blue"}
         link
         name="heart"
+        title={!isFavorite? "Save Quiz" : "Remove from favorites"}
       />
   )
 })
@@ -57,12 +61,14 @@ class QuizItem extends React.Component {
     if (!auth.isAuthenticated()) {
       history.push('/login')
     } else {
+      const userId = JSON.parse(window.localStorage.getItem('user')).userId
+      console.log(userId);
       axios({
         method: "POST",
-        url: `api/quizzes/${this.props.quizId}/favorite`,
+        url: `api/quizzes/${this.props.quizId}/favorite/${userId}`,
         headers: {
           'Authorization': auth.getAccessToken()
-        }
+        },
       })
       .then(res => {
         const { isFavorite } = this.state
@@ -78,25 +84,37 @@ class QuizItem extends React.Component {
   }
 
   render() {
-    const { name, quizId, tags, author } = this.props
+    const { name, quizId, tags, author, totalQuestions, timesPlayed, dateCreated } = this.props
 
     return (
       <Wrapper>
         <Header>
           <Title quizId={quizId} title={name}/>
-          <Author>{author} , Dec 18 | Questions 10</Author>
-          <TagList tags={tags}/>
+          <MetaData>
+            <Author to={`/user/${author}`}>{author}</Author>
+            <i>, {new Date(dateCreated).toDateString()} | Questions {totalQuestions}</i>
+            <TagList tags={tags}/>
+          </MetaData>
         </Header>
         <Footer>
-          {
-            <FavoriteButton
-              isFavorite={this.state.isFavorite}
-              onClick={this.updateFavorite.bind(this)}
-            />
-          }
-            10 {" "}
-          { " " } <Icon circular inverted color="orange" link name="fire"/> 341 { " "}
-          {/* <Button>Play</Button> */}
+          <Grid>
+            <Grid.Row columns="equal">
+              <Grid.Column >
+                <ButtonLink to={`/quiz/${quizId}`}>View</ButtonLink>
+              </Grid.Column>
+              <Grid.Column textAlign="right">
+                <FavoriteButton
+                  isFavorite={this.state.isFavorite}
+                  onClick={this.updateFavorite.bind(this)}
+                />
+                {" "}
+                <Icon
+                  title="Times quiz has Been played"
+                  circular inverted color="orange" link name="fire"/>
+                  {timesPlayed}
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </Footer>
       </Wrapper>
     )

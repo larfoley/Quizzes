@@ -22,9 +22,8 @@ injectGlobal`
   }
 
   body {
-    ${'' /* background-color: ${css.bgColor} !important; */}
     font-family: ${css.fontFamily} !important;
-    background-color: ${lighten(0.1, '#d1d8e0')} !important
+    background-color: ${lighten(0.1, '#d1d8e0')} !important;
   }
 
   h1,
@@ -38,6 +37,12 @@ injectGlobal`
   img {
     max-width: 100%;
     vertical-align: middle;
+  }
+
+  #root {
+    @media screen and (max-width: 800px) {
+      margin-bottom: calc(77.09px + 2em);
+    }
   }
 `
 

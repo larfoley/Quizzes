@@ -19,7 +19,8 @@ import {
   ProfilePage,
   DashboardPage,
   SettingsPage,
-  ErrorPage
+  ErrorPage,
+  EditQuizPage
 } from 'pages'
 
 const auth = new Auth()
@@ -44,6 +45,7 @@ class App extends React.Component {
         <Route path="/search" component={SearchPage} />
         <Route exact path="/quiz/:id" component={QuizPreviewPage} />
         <Route exact path="/quiz/:id/start" component={QuizPage} />
+        <Route exact path="/quiz/:id/edit" component={EditQuizPage} />
         <Route exact path="/tags" component={TagsPage} />
         <Route exact path="/tags/:tagName" component={TagPage} />
         <PrivateRoute exact path="/account" component={QuizPage} />

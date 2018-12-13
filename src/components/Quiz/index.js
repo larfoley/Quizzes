@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 import Button from 'components/Button'
 import Question from './Question'
 import Answer from './Answer'
 import QuizResults from './QuizResults'
-// import axios from 'axios'
 
 export default class Quiz extends Component {
   constructor(props) {
@@ -17,6 +17,14 @@ export default class Quiz extends Component {
       quizIsFinished: false,
     }
     this.playAgain = this.playAgain.bind(this)
+  }
+
+  incrementTimesPlayed() {
+    axios.put(`/api/quizzes/${this.props.quizId}/increment-times-played`)
+      .catch(err => {
+        console.log("Unable to increment quiz times played");
+        console.log(err.response);
+      })
   }
 
 
@@ -84,7 +92,10 @@ export default class Quiz extends Component {
     const questionIndex = this.state.questionIndex
     const currentQuestion = questions[questionIndex].questionName
     const currentAnswers = questions[questionIndex].answers
-    console.log("Quiz State", this.state);
+
+    if (this.state.quizIsFinished) {
+      this.incrementTimesPlayed()
+    }
     return (
       <div>
         {!this.state.quizIsFinished?

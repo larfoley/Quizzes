@@ -12,7 +12,6 @@ class QuizPage extends React.Component {
 
   componentWillMount() {
     const quizId = this.props.match.params.id
-    console.log("QUIZZZZZ", quizId);
     axios.get(`/api/quizzes/${quizId}`)
       .then(res => this.setState({quiz: res.data}))
       .catch(err => console.log)

@@ -3,6 +3,9 @@ import PageContainer from 'components/PageContainer'
 import Box from 'components/Box'
 import TagList from 'components/TagList'
 import Navigation from 'components/Navigation'
+import PageHeader from 'components/PageHeader'
+import { Icon } from 'semantic-ui-react'
+
 import axios from 'axios'
 
 export default class TagsPage extends React.Component {
@@ -30,6 +33,9 @@ export default class TagsPage extends React.Component {
     return (
       <div>
         <Navigation userIsAuthenticated={this.props.user}/>
+        <PageHeader>
+          <h1><Icon name="tag"/>Tags</h1>
+        </PageHeader>
         <PageContainer>
           <Box>
             <TagList tags={this.state.tags} />

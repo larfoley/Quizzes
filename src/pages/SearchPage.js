@@ -3,7 +3,6 @@ import { Main } from '../layouts'
 import PageContainer from 'components/PageContainer'
 import SearchQuiz from 'components/SearchQuiz'
 
-
 const SearchPage = props => (
   <Main>
     <PageContainer>

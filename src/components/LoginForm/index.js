@@ -33,9 +33,6 @@ export default class LoginForm extends Component {
       if (error) {
         this.setState({submitting: false, error})
       } else {
-      
-        const user = { username }
-        window.localStorage.setItem("user", JSON.stringify(user))
         this.setState({submitting: false, succesfullyLoggedin: true})
         NotificationManager.success('Logged In')
       }

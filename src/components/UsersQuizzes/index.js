@@ -21,14 +21,19 @@ export default class UsersQuizzes extends React.Component {
   }
 
   componentWillMount() {
+    const user = JSON.parse(window.localStorage.getItem('user'))
+    const userName = user.userName
+    console.log(userName);
     axios({
-      url: `/api/users/${"bob"}/quizzes`
+      url: `/api/users/${userName}`
     })
     .then(res => {
-      this.setState({quizzes: res.data, loading: false})
+      console.log(res.data);
+      this.setState({quizzes: res.data.quizzes, loading: false})
     })
     .catch(err => {
-
+      console.log(err.response);
+      this.setState({loading: false})
     })
   }
 
@@ -77,7 +82,7 @@ export default class UsersQuizzes extends React.Component {
                   1
                 </Table.Cell>
                 <Table.Cell textAlign="center">
-                  <Button icon primary>
+                  <Button icon primary as="a" href={`/quiz/${quiz.quizId}/edit`}>
                     <Icon name='eye'/>
                   </Button>
                   <Button icon color="green">

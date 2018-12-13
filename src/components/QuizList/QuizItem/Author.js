@@ -1,6 +1,7 @@
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
-const Author = styled.span`
+const Author = styled(Link)`
   font-style: italic;
   color: gray;
   display: inline-block;

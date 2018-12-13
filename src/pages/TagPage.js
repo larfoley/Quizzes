@@ -15,9 +15,7 @@ export default class TagPage extends React.Component {
   componentWillMount() {
     axios.get(`/api/quizzes/tag/${this.props.match.params.tagName}`)
       .then(res => {
-        return res.data.map(tag => {
-          return tag.quizzes[0]
-        })
+        return res.data
       })
       .then(quizzes => this.setState({ quizzes }))
       .catch(err => console.log)
@@ -29,7 +27,7 @@ export default class TagPage extends React.Component {
       <div>
         <Navigation />
         <PageHeader>
-          <h1><Icon name="tag"/> {this.props.match.params.tagName.toUpperCase()} QUIZZES</h1>
+          <h1> #{this.props.match.params.tagName.toUpperCase()}</h1>
         </PageHeader>
         <PageContainer>
             <QuizList quizzes={this.state.quizzes}/>
