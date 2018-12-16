@@ -24,6 +24,7 @@ class ProfilePage extends React.Component {
     this.state= {
       username: "",
       quizzes: [],
+      favorites: [],
       statusError: 0,
       statusText: "",
       loading: true,
@@ -35,7 +36,7 @@ class ProfilePage extends React.Component {
         ) },
         { menuItem: 'Favorite Quizzes', render: () => (
           <Tab.Pane attached={false}>
-            <QuizList quizzes={this.state.quizzes.filter((x,i) => i === 0)}/>
+            <QuizList quizzes={this.state.favorites}/>
           </Tab.Pane>
         ) },
 
@@ -45,19 +46,26 @@ class ProfilePage extends React.Component {
   }
 
   componentWillMount() {
+    console.log(3, this.state);
+    let userName, quizzes, favorites
+
     axios.get(`/api/users/${this.props.match.params.username}`)
       .then(({ data }) => {
-
-        const { userName, quizzes, favorites } = data
+        userName = data.userName
+        quizzes = data.quizzes
+        return axios.get(`/api/users/${this.props.match.params.username}/favorites`)
+      })
+      .then(({ data }) => {
         this.setState({
-          userName,
-          quizzes,
-          favorites: quizzes,
           loading: false,
-          statusCode: 200
+          statusCode: 200,
+          favorites: data,
+          userName,
+          quizzes
         })
       })
       .catch(err => {
+        console.log(err);
         const { response } = err
         this.setState({
           loading: false,

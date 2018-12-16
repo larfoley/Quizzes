@@ -79,16 +79,18 @@ export default class UsersQuizzes extends React.Component {
                   {quiz.description? quiz.description : "No Description"}
                 </Table.Cell>
                 <Table.Cell >
-                  1
+                  {quiz.timesPlayed}
                 </Table.Cell>
                 <Table.Cell textAlign="center">
-                  <Button icon primary as="a" href={`/quiz/${quiz.quizId}/edit`}>
-                    <Icon name='eye'/>
-                  </Button>
-                  <Button icon color="green">
 
-                    <Icon name='edit' />
+                  <Button icon color="green" as="a" href={`/quiz/${quiz.quizId}/start`}>
+                    <Icon name='eye' />
                   </Button>
+
+                  <Button icon primary as="a" href={`/quiz/${quiz.quizId}/edit`}>
+                    <Icon name='edit'/>
+                  </Button>
+
                   <Confirm
                     message="Are you sure you want to delte this quiz?"
                     onConfirm={() => {

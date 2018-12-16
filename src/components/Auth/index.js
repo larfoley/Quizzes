@@ -34,6 +34,7 @@ class Auth {
         })
         .catch(err => {
           console.log(err.response);
+          callback(err.response)
         })
     })
     .catch(error => {
@@ -45,13 +46,15 @@ class Auth {
   isAuthenticated() {
     const token = window.localStorage.getItem('token')
     const tokenExpiryTime = window.localStorage.getItem('tokenExpiryTime')
+    const user = window.localStorage.getItem('user')
 
-    if (token && tokenExpiryTime) {
+    if (token && tokenExpiryTime && user) {
       const expiryTime = parseInt(JSON.parse(tokenExpiryTime), 10)
       if (new Date().getTime() > expiryTime) {
         // Token expired so remove it from local storage
         window.localStorage.removeItem('token')
         window.localStorage.removeItem('tokenExpiryTime')
+        window.localStorage.removeItem('user')
         return false
       } else {
         return true

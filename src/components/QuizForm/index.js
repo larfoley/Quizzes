@@ -171,7 +171,7 @@ export default class QuizForm extends Component {
       data: { name, questions, description, tags }
     })
     .then((res) => {
-      NotificationManager.success("Your Quiz has been publised")
+      NotificationManager.success("Your Quiz has been updated")
       this.setState({submitting: false, quizSubmitted: true, createdQuizId: 1})
     })
     .catch(err => {
@@ -192,8 +192,8 @@ export default class QuizForm extends Component {
   }
 
   addTag(e) {
-    const formatTag = tag => tag.split(" ").join("-")
     e.preventDefault()
+    const formatTag = tag => tag.split(" ").join("-")
     if ((this.state.tag && this.state.tags.length < 10) && this.state.tag.length < 25) {
       this.setState(prevState => {
         let { tags } = prevState
@@ -232,13 +232,16 @@ export default class QuizForm extends Component {
       <Box maxWidth="600px">
 
         {this.state.quizSubmitted? (
+
           <div style={{textAlign: "center"}}>
-            <h2>Your quiz has been Publised</h2>
+            <h2>
+              Your quiz has been {this.props.mode === "edit" ? "updated" : "published" }
+            </h2>
             <p>
-              <Link to={`/quiz/${this.state.createdQuizId}`} >
+              <Link to={`/dashboard`} >
                 Click Here {" "}
               </Link>
-              to view your quiz.
+              to view your quizzes.
           </p>
         </div>
 
