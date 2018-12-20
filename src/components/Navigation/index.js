@@ -65,7 +65,7 @@ class Navigation extends React.Component {
 
           <Grid.Column textAlign="right">
 
-              <Responsive minWidth={800}>
+            <Responsive minWidth={800}>
 
               <Link to="/create-quiz">
                 <Button primary><Icon name="plus"/> Create Quiz</Button>
@@ -80,21 +80,33 @@ class Navigation extends React.Component {
               </Link>
 
 
+              {!auth.isAuthenticated()? (
+                <React.Fragment>
+                  <Link to="/login">
+                  Login
+                  </Link>
+                  <Link to="/register">
+                    Register
+                  </Link>
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <DropdownLink />
+                </React.Fragment>
+              )}
+            </Responsive>
             {!auth.isAuthenticated()? (
-              <React.Fragment>
-                <Link to="/login">
-                Login
-              </Link>
-              <Link to="/register">
-              Register
-            </Link>
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                <DropdownLink />
-              </React.Fragment>
-            )}
-          </Responsive>
+              <Responsive maxWidth={800}>
+                <React.Fragment>
+                  <Link to="/login">
+                  Login
+                  </Link>
+                  <Link to="/register">
+                    Register
+                  </Link>
+                </React.Fragment>
+              </Responsive>
+            ) : null}
           </Grid.Column>
         </Grid>
       </PageContainer>

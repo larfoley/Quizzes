@@ -23,7 +23,7 @@ export default class UsersQuizzes extends React.Component {
   componentWillMount() {
     const user = JSON.parse(window.localStorage.getItem('user'))
     const userName = user.userName
-    console.log(userName);
+
     axios({
       url: `/api/users/${userName}`
     })

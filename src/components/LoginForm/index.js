@@ -30,8 +30,15 @@ export default class LoginForm extends Component {
 
     this.setState({submitting: true})
     this.auth.authenticateUser(username, password, (error, res) => {
+      let errorMessage
+
       if (error) {
-        this.setState({submitting: false, error})
+        if (error.status === 400) {
+          errorMessage = "Username or Password is invalid."
+        } else {
+          errorMessage = "Internal Server Error. Try again later."
+        }
+        this.setState({submitting: false, error: errorMessage})
       } else {
         this.setState({submitting: false, succesfullyLoggedin: true})
         NotificationManager.success('Logged In')
@@ -58,8 +65,7 @@ export default class LoginForm extends Component {
           <Form onSubmit={this.handleSubmit}>
             {this.state.error?
               <Message negative>
-                <Message.Header>Login Failed</Message.Header>
-                <p>{this.state.error.message}</p>
+                <p>{this.state.error}</p>
               </Message>
              : null}
             <h2>Login</h2>

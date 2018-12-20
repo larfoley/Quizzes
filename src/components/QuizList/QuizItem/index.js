@@ -92,7 +92,7 @@ class QuizItem extends React.Component {
           <Title quizId={quizId} title={name}/>
           <MetaData>
             <Author to={`/user/${author}`}>{author}</Author>
-            <i>, {new Date(dateCreated).toDateString()} | Questions {totalQuestions}</i>
+            <i>, {new Date(dateCreated).toLocaleDateString()} | Questions {totalQuestions}</i>
             <TagList tags={tags}/>
           </MetaData>
         </Header>

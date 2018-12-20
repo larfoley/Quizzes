@@ -17,7 +17,7 @@ export default class RegisterForm extends Component {
       password: "",
       confirmPassword: "",
       submitting: false,
-      error: null,
+      errors: [],
       succesfullyRegistered: false
     }
 
@@ -27,12 +27,25 @@ export default class RegisterForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    this.setState({submitting: true, error: null})
+    this.setState({submitting: true, errors: []})
     const { userName, email, password, confirmPassword } = this.state
 
     auth.registerUser({ userName, email, password, confirmPassword }, error => {
       if (error) {
-        this.setState({ error, submitting: false })
+        const modelState = error.response.data.modelState
+        const errors = []
+
+        if (modelState) {
+          Object
+            .keys(modelState)
+            .forEach(key => modelState[key].forEach(err => errors.push(err)) )
+        }
+
+        if (errors.length === 0) {
+          errors.push("Internal Server Error")
+        }
+
+        this.setState({ errors, submitting: false })
       } else {
         this.setState({succesfullyRegistered: true, submitting: false})
       }
@@ -58,12 +71,11 @@ export default class RegisterForm extends Component {
           </div>
         ) : (
           <Form onSubmit={this.handleSubmit}>
-            {this.state.error?
-              <Message negative>
-                <Message.Header>Registration Failed</Message.Header>
-                <p>{this.state.error.message}</p>
+            {this.state.errors.map((error, key) => (
+              <Message key={key} negative>
+                <p>{error}</p>
               </Message>
-             : null}
+            ))}
             <h2>Register</h2>
             <FormField>
               <Label>Email</Label>

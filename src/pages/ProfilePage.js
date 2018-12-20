@@ -53,6 +53,7 @@ class ProfilePage extends React.Component {
       .then(({ data }) => {
         userName = data.userName
         quizzes = data.quizzes
+        console.log("data", data);
         return axios.get(`/api/users/${this.props.match.params.username}/favorites`)
       })
       .then(({ data }) => {

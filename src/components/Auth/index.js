@@ -33,11 +33,12 @@ class Auth {
           callback(null)
         })
         .catch(err => {
-          console.log(err.response);
-          callback(err.response)
+          console.log("status", err.status);
+          callback(err)
         })
     })
     .catch(error => {
+      console.log("status", error.status);
       callback(error)
     })
 
