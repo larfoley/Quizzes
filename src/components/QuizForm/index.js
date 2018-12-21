@@ -46,6 +46,7 @@ export default class QuizForm extends Component {
     this.addTag = this.addTag.bind(this)
     this.deleteTag = this.deleteTag.bind(this)
     this.toggleModal = this.toggleModal.bind(this)
+    this.addQuestion = this.addQuestion.bind(this)
   }
 
   componentWillMount() {
@@ -145,6 +146,14 @@ export default class QuizForm extends Component {
       console.log(err.response);
       NotificationManager.warning(err.message)
       this.setState({submitting: false})
+    })
+  }
+
+  addQuestion(question) {
+    this.setState(prevState => {
+      prevState.questions.push(question)
+      prevState.modalIsOpen = false;
+      return prevState
     })
   }
 
@@ -296,7 +305,7 @@ export default class QuizForm extends Component {
                   size='small'
                   >
                     <Modal.Content>
-                      <AddQuestionForm updateQuiz={this.updateQuiz.bind(this)}/>
+                      <AddQuestionForm addQuestion={this.addQuestion.bind(this)}/>
                     </Modal.Content>
                   </Modal>
                 </FormField>

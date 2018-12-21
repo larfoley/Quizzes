@@ -28,9 +28,10 @@ export default class AddQuestionForm extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleWrongAnswerChange = this.handleWrongAnswerChange.bind(this)
     this.removeWrongAnswer = this.removeWrongAnswer.bind(this)
+    this.validate = this.validate.bind(this)
   }
 
-  validateInput() {
+  validate() {
     const { question, correctAnswer, wrongAnswers } = this.state
 
     if (question === "") {
@@ -52,7 +53,7 @@ export default class AddQuestionForm extends Component {
   }
 
   onAddQuestion() {
-    if (!this.validateInput()) {return}
+    if (!this.validate()) {return}
 
     let {
       question,
@@ -71,11 +72,7 @@ export default class AddQuestionForm extends Component {
 
     newQuestion.answers = newQuestion.answers.concat(wrongAnswers)
 
-    this.props.updateQuiz(prevState => {
-      prevState.questions.push(newQuestion)
-      prevState.modalIsOpen = false;
-      return prevState
-    })
+    this.props.addQuestion(newQuestion)
 
   }
 
