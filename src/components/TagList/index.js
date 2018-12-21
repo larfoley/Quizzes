@@ -7,11 +7,11 @@ const StyledLink = styled(Link)`
   color: #1DA1F2;
   margin-right: 1em;
   display: ${props => props.display? props.display : "inline"};
-  margin-bottom: 1em;
   font-size: 1.1em;
 `
 
 const Wrapper = styled.div`
+  position: absolute;
   margin-bottom: 1em;
 `
 
@@ -24,7 +24,6 @@ const Tag = ({ name, displayName, inline }) => (
 )
 
 const TagList = ({ tags, inline }) => {
-  console.log(tags);
   return (
     <Wrapper>
       {tags.map((tag, key) => (

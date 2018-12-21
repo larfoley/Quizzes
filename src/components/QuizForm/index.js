@@ -29,20 +29,13 @@ export default class QuizForm extends Component {
     super(props)
     this.state = {
       createdQuizId: 0,
-      questions: [
-        {
-          questionName: "What is foo?",
-          answers: [{name: "foo", isCorrect: true}, {name: "bar", isCorrect: false}],
-
-        },
-        {questionName: "What is bar?", answers: [{name: "foo", isCorrect: true}, {name: "bar", isCorrect: false}]}
-      ],
+      questions: [],
       tags: [],
       question: "",
       wrongAnswer: "",
       correctAnswer: "",
-      name: "Foo Quiz",
-      description: "a quiz about foo",
+      name: "",
+      description: "",
       tag: "",
       modalIsOpen: false,
       submitting: false,

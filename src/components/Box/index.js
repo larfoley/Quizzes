@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 const Box = styled.div`
+  display: ${props => props.display? props.display : "block"};
   background-color: white;
   padding: 2em;
   margin-top: 2em;
