@@ -5,6 +5,9 @@ import axios from 'axios'
 import { NotificationManager } from 'react-notifications'
 import Confirm from 'components/Confirm'
 import {  Link } from 'react-router-dom'
+import Auth from 'components/Auth'
+
+const auth = new Auth()
 
 const Wrapper = styled.div`
   margin: 2em 0;
@@ -38,7 +41,13 @@ export default class UsersQuizzes extends React.Component {
   }
 
   deleteQuiz(quizId) {
-    axios.delete(`/api/quizzes/${quizId}`)
+    axios({
+      method: "delete",
+      url: `/api/quizzes/${quizId}`,
+      headers: {
+        'Authorization': auth.getAccessToken()
+      }
+    })
       .then(res => {
         this.setState(prevState => {
           prevState.quizzes = prevState.quizzes.filter(q => q.quizId !== quizId)
